@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="theme-color" content="#3B6B9E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<title>🛠️ Ministrando à Maneira do Senhor</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTWluaXN0cmFuZG8iLCJzaG9ydF9uYW1lIjoiTWluaXN0cmFyIiwic3RhcnRfdXJsIjoiLiIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiNGNEY1RjciLCJ0aGVtZV9jb2xvciI6IiMzQjZCOUUifQ==">
+<style>
+:root{
+--p:#3B6B9E;--pl:#6B9FCC;--pd:#2A5478;--pc:rgba(59,107,158,.12);
+--a:#C8850A;--al:#E8B44A;
+--ok:#2D8F6F;--w:#B8860B;--ng:#C0392B;--info:#2980B9;--or:#CB6D3B;
+--bg:#F4F5F7;--bg2:#FFF;--bg3:#ECEEF1;--bg4:#D5D8DC;
+--tx:#2C3E50;--tx2:#5D6D7E;--tx3:#ABB2B9;
+--sh:0 2px 10px rgba(0,0,0,.06);--sh2:0 6px 24px rgba(0,0,0,.1);
+--r:12px;--r2:16px;
+--sw:260px;--hh:56px;--bh:64px;
+}
+[data-theme=dark]{
+--bg:#1B2631;--bg2:#212F3D;--bg3:#2C3E50;--bg4:#34495E;
+--tx:#D5D8DC;--tx2:#ABB2B9;--tx3:#5D6D7E;--pc:rgba(107,159,204,.15);
+--sh:0 2px 10px rgba(0,0,0,.25);--sh2:0 6px 24px rgba(0,0,0,.35);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-thumb{background:var(--pl);border-radius:3px}
+.hid{display:none!important}
+button{font-family:inherit}
+a{color:var(--p);text-decoration:none}
+
+/* SIDEBAR */
+.sb{position:fixed;left:0;top:0;width:var(--sw);height:100vh;background:var(--bg2);border-right:1px solid var(--bg4);z-index:100;transition:transform .3s;overflow-y:auto;display:flex;flex-direction:column}
+.sb.shut{transform:translateX(-100%)}
+.sb-h{padding:16px;text-align:center;border-bottom:1px solid var(--bg4)}
+.sb-h h2{font-size:14px;color:var(--p);margin-top:4px}
+.sb-h small{color:var(--tx2);font-size:10px}
+.ns{padding:6px 14px;font-size:9px;text-transform:uppercase;color:var(--tx3);letter-spacing:1.2px;margin-top:10px;font-weight:600}
+.ni{display:flex;align-items:center;gap:10px;padding:9px 14px;cursor:pointer;transition:.15s;border-radius:8px;margin:1px 8px;font-size:13px;color:var(--tx2);user-select:none}
+.ni:hover,.ni.on{background:var(--p);color:#fff}
+.ni .ic{font-size:15px;width:22px;text-align:center;flex-shrink:0}
+.sb-f{margin-top:auto;padding:10px;border-top:1px solid var(--bg4)}
+
+/* HEADER */
+.hd{position:fixed;top:0;left:var(--sw);right:0;height:var(--hh);background:var(--bg2);border-bottom:1px solid var(--bg4);display:flex;align-items:center;justify-content:space-between;padding:0 16px;z-index:90;transition:left .3s}
+.hd.full{left:0}
+.hd-l{display:flex;align-items:center;gap:10px}
+.hd-bc{font-size:11px;color:var(--tx3);margin-left:4px}
+.mbtn{background:none;border:none;font-size:20px;cursor:pointer;color:var(--tx);display:none;padding:2px}
+.hd-t{font-size:15px;font-weight:600}
+.hd-r{display:flex;align-items:center;gap:8px}
+.hb{background:var(--bg3);border:none;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.2s;color:var(--tx)}
+.hb:hover{background:var(--p);color:#fff}
+.hb.has-notif{position:relative}
+.hb.has-notif::after{content:'';position:absolute;top:4px;right:4px;width:8px;height:8px;border-radius:50%;background:var(--ng);border:2px solid var(--bg2)}
+
+/* BOTTOM NAV (mobile) */
+.bnav{display:none;position:fixed;bottom:0;left:0;right:0;height:var(--bh);background:var(--bg2);border-top:1px solid var(--bg4);z-index:95;justify-content:space-around;align-items:center;padding:0 4px;padding-bottom:env(safe-area-inset-bottom)}
+.bn-i{display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 8px;cursor:pointer;color:var(--tx3);font-size:10px;transition:.15s;border-radius:8px;min-width:52px}
+.bn-i.on{color:var(--p)}
+.bn-i .bi{font-size:20px}
+
+/* MAIN */
+.mn{margin-left:var(--sw);margin-top:var(--hh);padding:20px;min-height:calc(100vh - var(--hh));transition:margin-left .3s}
+.mn.full{margin-left:0}
+
+/* AVATAR */
+.av{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700;color:#fff;flex-shrink:0;text-transform:uppercase}
+.av-sm{width:32px;height:32px;font-size:12px}
+.av-lg{width:60px;height:60px;font-size:22px}
+
+/* CARDS */
+.cd{background:var(--bg2);border-radius:var(--r2);padding:16px;box-shadow:var(--sh);transition:.2s}
+.cd:hover{box-shadow:var(--sh2)}
+.cd-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cd-t{font-size:15px;font-weight:600}
+
+/* GRID */
+.g{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+.ga{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
+
+/* STAT */
+.sc{background:var(--bg2);border-radius:var(--r2);padding:16px;box-shadow:var(--sh);text-align:center;transition:.2s;cursor:pointer;position:relative;overflow:hidden}
+.sc:hover{transform:translateY(-3px);box-shadow:var(--sh2)}
+.sc .si{font-size:28px;margin-bottom:6px}
+.sc .sv{font-size:26px;font-weight:700;color:var(--p)}
+.sc .sl{font-size:11px;color:var(--tx2);margin-top:3px}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px}
+.sc.grn::after{background:var(--ok)}.sc.ylw::after{background:var(--w)}.sc.orn::after{background:var(--or)}.sc.red::after{background:var(--ng)}.sc.acc::after{background:var(--a)}.sc.pri::after{background:var(--p)}
+
+/* BTN */
+.bt{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:var(--r);border:none;cursor:pointer;font-size:13px;font-weight:500;transition:.2s;white-space:nowrap}
+.bp{background:var(--p);color:#fff}.bp:hover{background:var(--pd)}
+.ba{background:var(--a);color:#fff}.ba:hover{opacity:.9}
+.bs{background:var(--ok);color:#fff}
+.bd{background:var(--ng);color:#fff}
+.bo{background:transparent;border:2px solid var(--p);color:var(--p)}.bo:hover{background:var(--p);color:#fff}
+.bsm{padding:5px 10px;font-size:11px;border-radius:8px}
+.blg{padding:12px 28px;font-size:15px;border-radius:14px}
+.bbl{width:100%;justify-content:center}
+.bic{width:32px;height:32px;padding:0;justify-content:center;border-radius:50%}
+.bg{display:flex;gap:6px;flex-wrap:wrap}
+
+/* FORM */
+.fg{margin-bottom:14px}
+.fl{display:block;margin-bottom:5px;font-size:12px;font-weight:500;color:var(--tx2)}
+.fi,.fs,.ft{width:100%;padding:9px 12px;border:2px solid var(--bg4);border-radius:var(--r);font-size:13px;background:var(--bg);color:var(--tx);transition:.2s;font-family:inherit}
+.fi:focus,.fs:focus,.ft:focus{border-color:var(--p);outline:none;box-shadow:0 0 0 3px var(--pc)}
+.fi.err{border-color:var(--ng)}
+.ft{min-height:70px;resize:vertical}
+
+/* BADGE */
+.bd-g{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:16px;font-size:10px;font-weight:600}
+.bdg{background:#d5eee4;color:#1e7a56}
+.bdy{background:#f5ecd0;color:#8a6914}
+.bdo{background:#f5dfd0;color:#a0522d}
+.bdr{background:#f5d0d0;color:#a02020}
+.bdp{background:var(--pc);color:var(--p)}
+.bda{background:#f5ecd0;color:var(--a)}
+[data-theme=dark] .bdg{background:#1a3a2a;color:#4fc}
+[data-theme=dark] .bdy{background:#3a3520;color:#ec5}
+[data-theme=dark] .bdo{background:#3a2515;color:#e95}
+[data-theme=dark] .bdr{background:#3a1515;color:#f77}
+[data-theme=dark] .bdp{background:#1e3450;color:var(--pl)}
+
+/* MODAL */
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:flex;align-items:center;justify-content:center;padding:12px;opacity:0;visibility:hidden;transition:.25s}
+.mo.on{opacity:1;visibility:visible}
+.ml{background:var(--bg2);border-radius:var(--r2);width:100%;max-width:540px;max-height:88vh;overflow-y:auto;transform:scale(.92);transition:.25s}
+.mo.on .ml{transform:scale(1)}
+.ml-h{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--bg4);position:sticky;top:0;background:var(--bg2);z-index:1}
+.ml-h h3{font-size:16px}
+.ml-x{background:none;border:none;font-size:22px;cursor:pointer;color:var(--tx2);width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:.15s}
+.ml-x:hover{background:var(--bg3)}
+.ml-b{padding:16px 20px}
+.ml-f{padding:12px 20px;border-top:1px solid var(--bg4);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--bg2)}
+
+/* PROGRESS */
+.pr{background:var(--bg4);border-radius:20px;height:7px;overflow:hidden}
+.pb{height:100%;border-radius:20px;transition:width .6s;background:linear-gradient(90deg,var(--p),var(--a))}
+
+/* TIMELINE */
+.tl{position:relative;padding-left:22px}
+.tl::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:2px;background:var(--bg4)}
+.tl-i{position:relative;margin-bottom:16px;padding-left:14px}
+.tl-i::before{content:'';position:absolute;left:-19px;top:3px;width:10px;height:10px;border-radius:50%;background:var(--p);border:2px solid var(--bg2)}
+.tl-d{font-size:10px;color:var(--tx3)}
+.tl-c{margin-top:3px;font-size:12px}
+
+/* TABS */
+.tabs{display:flex;gap:2px;border-bottom:2px solid var(--bg4);margin-bottom:16px;overflow-x:auto}
+.tab{padding:9px 14px;cursor:pointer;font-size:12px;color:var(--tx2);border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:.15s}
+.tab.on{color:var(--p);border-bottom-color:var(--p);font-weight:600}
+
+/* TOAST */
+.tc{position:fixed;bottom:80px;right:16px;z-index:300;display:flex;flex-direction:column;gap:6px;max-width:340px}
+.tt{padding:10px 16px;border-radius:var(--r);color:#fff;font-size:12px;animation:si .3s;display:flex;align-items:center;gap:8px;box-shadow:var(--sh2)}
+@keyframes si{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+.tt-ok{background:var(--ok)}.tt-er{background:var(--ng)}.tt-wr{background:var(--or)}.tt-in{background:var(--info)}
+.tt .undo-btn{background:rgba(255,255,255,.3);border:none;color:#fff;padding:3px 10px;border-radius:6px;cursor:pointer;font-size:11px;margin-left:auto;white-space:nowrap}
+
+/* ALERTS */
+.al{padding:10px 14px;border-radius:var(--r);margin-bottom:10px;font-size:12px;display:flex;align-items:center;gap:8px}
+.al-w{background:#f5ecd0;color:#6e5310;border:1px solid #e8d9a0}
+.al-d{background:#f5d0d0;color:#721c24;border:1px solid #e0b0b0}
+.al-s{background:#d5eee4;color:#155724;border:1px solid #b0d8c0}
+.al-i{background:#d0e4f5;color:#0c5460;border:1px solid #b0cce0}
+[data-theme=dark] .al-w{background:#3a3520;color:#ec5;border-color:#4a4530}
+[data-theme=dark] .al-d{background:#3a1515;color:#f77;border-color:#4a2525}
+[data-theme=dark] .al-s{background:#1a3a2a;color:#4fc;border-color:#2a4a3a}
+[data-theme=dark] .al-i{background:#1a2a3a;color:#8cf;border-color:#2a3a4a}
+
+/* INSPIRE */
+.ib{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;padding:10px 16px;border-radius:var(--r);margin-bottom:16px;font-size:12px;text-align:center;font-style:italic}
+
+/* WELCOME */
+.ws{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:76vh;text-align:center;padding:20px}
+.wi{font-size:56px;margin-bottom:14px;animation:pu 2.5s infinite}
+@keyframes pu{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
+.wt{font-size:26px;font-weight:700;color:var(--p);margin-bottom:6px}
+.wst{font-size:13px;color:var(--tx2);margin-bottom:20px}
+.wsc{background:var(--bg3);border-radius:var(--r2);padding:16px;margin-bottom:28px;max-width:440px;font-style:italic;color:var(--tx2);line-height:1.6;border-left:4px solid var(--p);font-size:13px;text-align:left}
+.wsc cite{display:block;margin-top:6px;font-style:normal;font-weight:600;color:var(--p)}
+
+/* WIZARD */
+.wz{display:flex;justify-content:center;gap:6px;margin-bottom:28px}
+.wzs{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;background:var(--bg4);color:var(--tx3);transition:.3s}
+.wzs.on{background:var(--p);color:#fff;transform:scale(1.1)}
+.wzs.ok{background:var(--ok);color:#fff}
+
+/* FAMILY CARD */
+.fc{background:var(--bg2);border-radius:var(--r2);padding:14px;box-shadow:var(--sh);display:flex;align-items:center;gap:10px;transition:.2s;cursor:pointer;border-left:4px solid var(--ok);margin-bottom:8px}
+.fc:hover{box-shadow:var(--sh2);transform:translateX(3px)}
+.fc.rl{border-left-color:var(--ok)}.fc.rm{border-left-color:var(--w)}.fc.rh{border-left-color:var(--or)}.fc.rc{border-left-color:var(--ng)}
+.fn{font-weight:600;font-size:13px}
+.fd{font-size:11px;color:var(--tx2);margin-top:2px}
+.fa{display:flex;gap:4px;align-items:center}
+
+/* ACTION CARD */
+.ac{background:var(--bg2);border-radius:var(--r2);padding:14px;box-shadow:var(--sh);margin-bottom:10px;border-left:4px solid var(--p)}
+.ac.urg{border-left-color:var(--ng)}
+.ac .at{font-weight:600;font-size:13px}
+.ac .ad{font-size:11px;color:var(--tx2);margin-top:3px}
+.ac .ab{display:flex;gap:5px;margin-top:8px;flex-wrap:wrap}
+
+/* MISSION */
+.mi{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--r);background:var(--bg3);margin-bottom:7px;transition:.2s;cursor:pointer}
+.mi:hover{background:var(--bg4)}
+.mi.dn{opacity:.55;text-decoration:line-through}
+.mc{width:22px;height:22px;border-radius:50%;border:2px solid var(--p);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px}
+.mi.dn .mc{background:var(--ok);border-color:var(--ok);color:#fff}
+
+/* CHART */
+.chr{display:flex;align-items:end;gap:6px;height:140px;padding:0 4px}
+.cc{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px}
+.cc .cb{width:100%;max-width:36px;border-radius:5px 5px 0 0;transition:height .5s;min-height:3px}
+.cc .cl{font-size:9px;color:var(--tx3)}
+.cc .cv{font-size:10px;font-weight:600}
+
+/* CANVAS CHART */
+.chart-canvas{width:100%;max-width:100%;height:auto;display:block}
+
+/* SECTION */
+.sh{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.st{font-size:20px;font-weight:700}
+.sst{font-size:12px;color:var(--tx2)}
+
+/* CHIP/TAG */
+.chip{display:inline-flex;align-items:center;gap:3px;padding:3px 10px;border-radius:16px;font-size:11px;background:var(--bg3);color:var(--tx2);margin:2px}
+.tag{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:12px;font-size:10px;font-weight:600;cursor:pointer;transition:.15s}
+.tag:hover{opacity:.8}
+
+/* LIST */
+.li{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--bg4);transition:.15s}
+.li:hover{background:var(--bg3)}
+.li:last-child{border-bottom:none}
+
+/* CALENDAR */
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+.ch{padding:6px;text-align:center;font-size:10px;font-weight:600;color:var(--tx2)}
+.cy{padding:6px;text-align:center;font-size:12px;border-radius:8px;cursor:pointer;transition:.15s;min-height:32px;display:flex;align-items:center;justify-content:center}
+.cy:hover{background:var(--pl);color:#fff}
+.cy.td{background:var(--p);color:#fff;font-weight:700}
+.cy.ev{position:relative}
+.cy.ev::after{content:'';position:absolute;bottom:2px;width:4px;height:4px;border-radius:50%;background:var(--a)}
+.cy.ot{color:var(--tx3)}
+
+/* LEVEL */
+.lvl{display:flex;align-items:center;gap:10px;padding:10px;background:var(--bg3);border-radius:var(--r);margin-bottom:14px}
+.lvi{font-size:24px}.lvn{font-weight:600;font-size:13px}.lvx{font-size:10px;color:var(--tx2)}
+
+/* FILTER */
+.fb{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;align-items:center}
+
+/* BACKDROP */
+.bk{position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:99;display:none}
+.bk.on{display:block}
+
+/* EMPTY */
+.es{text-align:center;padding:40px 16px;color:var(--tx3)}
+.es .ei{font-size:44px;margin-bottom:10px}
+.es p{margin-bottom:14px;font-size:13px}
+
+/* SKELETON */
+.skel{background:linear-gradient(90deg,var(--bg3) 25%,var(--bg4) 50%,var(--bg3) 75%);background-size:200%;animation:shimmer 1.5s infinite;border-radius:var(--r);height:20px}
+@keyframes shimmer{0%{background-position:200%}100%{background-position:-200%}}
+
+/* FAB */
+.fab{position:fixed;bottom:80px;right:16px;width:52px;height:52px;border-radius:50%;background:var(--a);color:#fff;border:none;font-size:22px;cursor:pointer;box-shadow:var(--sh2);z-index:80;transition:.2s;display:flex;align-items:center;justify-content:center}
+.fab:hover{transform:scale(1.1)}
+.fab:active{transform:scale(.95)}
+
+/* COUNTER ANIMATION */
+.cnt{transition:all .4s}
+
+/* RELATIVE DATE */
+.rd{font-size:10px;color:var(--tx3)}
+
+/* PRINT */
+@media print{
+.sb,.hd,.bnav,.fab,.bk,.mo,.tc,.hb,.mbtn{display:none!important}
+.mn{margin:0!important;padding:10px!important}
+.cd,.sc,.ac,.fc{box-shadow:none!important;border:1px solid #ddd}
+body{background:#fff!important;color:#000!important}
+}
+
+/* MEETING MODE */
+body.meeting .sb,body.meeting .bnav,body.meeting .fab{display:none!important}
+body.meeting .hd{left:0}body.meeting .mn{margin-left:0}
+
+/* RESPONSIVE */
+@media(max-width:1024px){.g4{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+.sb{transform:translateX(-100%)}.sb.open{transform:translateX(0)}
+.hd{left:0}.mn{margin-left:0;padding-bottom:calc(var(--bh) + 16px)}
+.mbtn{display:flex}
+.bnav{display:flex}
+.fab{bottom:calc(var(--bh) + 12px)}
+.tc{bottom:calc(var(--bh) + 12px)}
+.g2,.g3,.g4{grid-template-columns:1fr}
+.wt{font-size:20px}
+}
+@media(max-width:400px){.mn{padding:10px;padding-bottom:calc(var(--bh) + 12px)}.sc{padding:12px}.sc .sv{font-size:20px}}
+.fade{animation:fi .35s ease}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.celeb{animation:cel .8s ease}
+@keyframes cel{0%{transform:scale(1)}25%{transform:scale(1.15) rotate(4deg)}50%{transform:scale(.92) rotate(-4deg)}75%{transform:scale(1.08)}100%{transform:scale(1)}}
+</style>
+</head>
+<body>
+<div class="bk" id="bk" onclick="A.sidebar(false)"></div>
+<nav class="sb" id="sb">
+<div class="sb-h"><div style="font-size:28px">🛠️</div><h2>Ministrando à Maneira<br>do Senhor</h2><small>Cuidando de pessoas como o Salvador cuidaria</small></div>
+<div style="flex:1;overflow-y:auto;padding:6px 0" id="navItems"></div>
+<div class="sb-f"><div class="ni" onclick="A.meeting()" id="meetBtn"><span class="ic">📺</span>Modo Reunião</div><div class="ni" onclick="A.reset()" style="color:var(--ng)"><span class="ic">🔄</span>Reiniciar</div></div>
+</nav>
+<header class="hd" id="hd">
+<div class="hd-l"><button class="mbtn" onclick="A.sidebar()">☰</button><span class="hd-t" id="ht">Início</span><span class="hd-bc" id="hbc"></span></div>
+<div class="hd-r">
+<button class="hb" onclick="A.showSearch()" title="Pesquisar (/)">🔍</button>
+<button class="hb" onclick="A.showAlerts()" title="Alertas" id="nb">🔔</button>
+<button class="hb" onclick="A.theme()" title="Tema" id="tb">🌙</button>
+</div>
+</header>
+<div class="bnav" id="bnav">
+<div class="bn-i on" data-v="welcome" onclick="A.go('welcome')"><span class="bi">🏠</span>Início</div>
+<div class="bn-i" data-v="today" onclick="A.go('today')"><span class="bi">🔧</span>Ministrar</div>
+<div class="bn-i" data-v="families" onclick="A.go('families')"><span class="bi">👥</span>Famílias</div>
+<div class="bn-i" data-v="dashboard" onclick="A.go('dashboard')"><span class="bi">📊</span>Painel</div>
+<div class="bn-i" data-v="settings" onclick="A.go('settings')"><span class="bi">⚙️</span>Mais</div>
+</div>
+<main class="mn" id="mn"></main>
+<button class="fab hid" id="fab" onclick="A.fab()">➕</button>
+<div class="mo" id="mo"><div class="ml"><div class="ml-h"><h3 id="mt"></h3><button class="ml-x" onclick="A.cm()">✕</button></div><div class="ml-b" id="mb"></div><div class="ml-f" id="mf"></div></div></div>
+<div class="tc" id="tc"></div>
+<script>
+const A={
+v:'welcome',d:{},_undo:null,
+NAV:[
+{s:'Principal',items:[{v:'welcome',i:'🏠',t:'Início'},{v:'today',i:'🔧',t:'Ministrar Hoje'},{v:'dashboard',i:'📊',t:'Painel'},{v:'mission',i:'🎯',t:'Missão da Semana'},{v:'actions',i:'📌',t:'Próximas Ações'}]},
+{s:'Cuidado',items:[{v:'families',i:'👥',t:'Famílias'},{v:'companions',i:'🤝',t:'Companheiros'},{v:'needs',i:'📋',t:'Oportunidades de Servir'},{v:'records',i:'📝',t:'Registros'},{v:'activities',i:'📆',t:'Atividades da Ala'}]},
+{s:'Organização',items:[{v:'neighborhoods',i:'📍',t:'Bairros e Regiões'},{v:'calendar',i:'📅',t:'Calendário'},{v:'planner',i:'📋',t:'Planejador'},{v:'messages',i:'💬',t:'Mensagens'},{v:'documents',i:'📂',t:'Documentos'}]},
+{s:'Inspiração',items:[{v:'miracles',i:'✨',t:'Milagres'},{v:'levels',i:'⭐',t:'Níveis e Conquistas'},{v:'impact',i:'📈',t:'Vidas Fortalecidas'}]},
+{s:'Liderança',items:[{v:'wardview',i:'⛪',t:'Visão da Ala'},{v:'hierarchy',i:'🏛️',t:'Organização'},{v:'wardhealth',i:'📋',t:'Saúde da Ala'}]},
+{s:'Sistema',items:[{v:'settings',i:'⚙️',t:'Configurações'},{v:'backup',i:'💾',t:'Backup'},{v:'profiles',i:'👤',t:'Perfis'}]}
+],
+DEFS:{companions:[],families:[],records:[],needs:[],miracles:[],events:[],activities:[],documents:[],planner:[],tags:[],
+messages_templates:[{c:'Contato',t:'Olá! Como vocês estão? Estamos pensando em vocês.'},{c:'Aniversário',t:'Feliz aniversário! Que Deus abençoe vocês neste dia especial!'},{c:'Boas-vindas',t:'Bem-vindos à nossa ala! Estamos felizes com a presença de vocês.'},{c:'Convite',t:'Gostaríamos de convidá-los para a atividade da ala.'},{c:'Espiritual',t:'Lembrem-se: "O Senhor está convosco enquanto vós estiverdes com ele."'},{c:'Acompanhamento',t:'Olá! Passando para saber como estão. Precisam de algo?'},{c:'Agradecimento',t:'Obrigado pela presença e pelo exemplo.'},{c:'Emergência',t:'Estamos orando por vocês. Se precisarem de qualquer coisa, conte conosco.'}],
+neighborhoods:[],regions:[],
+categories:['Saúde','Emprego','Moradia','Financeiro','Alimentação','Transporte','Espiritual','Emocional','Idosos','Jovens','Crianças'],
+priorities:[{n:'Baixa',c:'grn'},{n:'Média',c:'ylw'},{n:'Alta',c:'orn'},{n:'Urgente',c:'red'}],
+levels:[{n:'Semente',i:'🌱',x:0},{n:'Mão Amiga',i:'🤝',x:50},{n:'Servidor Ativo',i:'🔧',x:120},{n:'Visitador Fiel',i:'🏠',x:250},{n:'Companheiro Exemplar',i:'⭐',x:400},{n:'Servo Dedicado',i:'🌟',x:600},{n:'Mãos do Salvador',i:'👑',x:1000}],
+achievements:[{n:'Consolador',i:'🤝',d:'Consolou 5 famílias',r:5,t:'cons'},{n:'Resgatador',i:'🌱',d:'3 famílias retornaram',r:3,t:'resc'},{n:'Amigo Fiel',i:'👊',d:'10 contatos',r:10,t:'cont'},{n:'Porta Aberta',i:'🏠',d:'5 visitas',r:5,t:'vis'},{n:'Exemplo',i:'⭐',d:'20 registros',r:20,t:'rec'},{n:'Esperança',i:'🙏',d:'10 msg espirituais',r:10,t:'spi'},{n:'Salvador',i:'👑',d:'50 ações',r:50,t:'tot'}],
+quotes:['O Salvador ministrava um a um.','A caridade nunca falha.','Servir é amar em ação.','Apascenta minhas ovelhas.','O que fizestes ao menor, a mim o fizestes.','Amai-vos uns aos outros como eu vos amei.','Ide e fazei discípulos de todas as nações.','Vinde a mim, todos os que estais cansados e sobrecarregados.'],
+record_types:['Visita','Ligação','Mensagem','WhatsApp','Ajuda','Serviço','Compartilhamento Espiritual','Convite','Oração','Apoio Emocional'],
+service_types:['Mudança','Transporte','Doação','Alimentos','Limpeza','Manutenção','Projeto Humanitário','Visitação'],
+goals:{visits:5,contacts:10,families:100,needs:3,invites:2},
+hierarchy:['Bispado','Quórum de Élderes','Sociedade de Socorro','Jovens Rapazes','Moças','Primária','Missionários','Companheiros de Ministração'],
+setupDone:false,profile:'Administrador',ward:'Minha Ala',
+permissions:{Administrador:'all',Ministrador:'basic',Ministradora:'basic','Líder do Quórum':'leader','Líder Sociedade de Socorro':'leader',Bispado:'bishop'}
+},
+COLORS:['#3B6B9E','#2D8F6F','#C8850A','#8E6BAA','#CB6D3B','#C0392B','#2980B9','#27AE60','#D4AC0D','#7D3C98','#1ABC9C','#E74C3C'],
+
+init(){
+this.load();this.buildNav();
+if(!this.d.setupDone)this.setup();else this.go('welcome');
+this.applyTheme();this.keys();
+setInterval(()=>this.save(),60000);
+this.checkAlerts();
+},
+load(){const s=localStorage.getItem('md');if(s){this.d=JSON.parse(s);for(let k in this.DEFS)if(!(k in this.d))this.d[k]=JSON.parse(JSON.stringify(this.DEFS[k]))}else this.d=JSON.parse(JSON.stringify(this.DEFS))},
+save(){localStorage.setItem('md',JSON.stringify(this.d))},
+uid(){return Date.now().toString(36)+Math.random().toString(36).substr(2,5)},
+buildNav(){
+let h='';this.NAV.forEach(s=>{h+=`<div class="ns">${s.s}</div>`;s.items.forEach(i=>{h+=`<div class="ni${this.v===i.v?' on':''}" data-v="${i.v}" onclick="A.go('${i.v}')"><span class="ic">${i.i}</span>${i.t}</div>`})});
+document.getElementById('navItems').innerHTML=h
+},
+go(v){
+this.v=v;document.querySelectorAll('.ni[data-v]').forEach(e=>e.classList.toggle('on',e.dataset.v===v));
+document.querySelectorAll('.bn-i').forEach(e=>e.classList.toggle('on',e.dataset.v===v));
+let t='';this.NAV.forEach(s=>s.items.forEach(i=>{if(i.v===v)t=i.t}));
+document.getElementById('ht').textContent=t||v;
+document.getElementById('fab').classList.toggle('hid',['welcome','dashboard','mission','levels','impact','wardview','wardhealth','backup','profiles','hierarchy'].includes(v));
+this.render();this.sidebar(false)
+},
+render(){const m=document.getElementById('mn');const fn=this['v_'+this.v];if(fn){m.innerHTML=fn.call(this);m.className='mn fade'+(document.getElementById('sb').classList.contains('open')?'':' full');this['a_'+this.v]?.call(this)}},
+sidebar(f){const s=document.getElementById('sb');const b=document.getElementById('bk');const o=f!==undefined?f:!s.classList.contains('open');s.classList.toggle('open',o);b.classList.toggle('on',o)},
+theme(){const d=document.documentElement;const dk=d.getAttribute('data-theme')==='dark';d.setAttribute('data-theme',dk?'':'dark');document.getElementById('tb').textContent=dk?'🌙':'☀️';localStorage.setItem('th',dk?'l':'d')},
+applyTheme(){if(localStorage.getItem('th')==='d'){document.documentElement.setAttribute('data-theme','dark');document.getElementById('tb').textContent='☀️'}},
+toast(m,t='ok',undo){const c=document.getElementById('tc');const e=document.createElement('div');e.className='tt tt-'+t;e.innerHTML=m+(undo?`<button class="undo-btn" onclick="A.doUndo(this)">Desfazer</button>`:'');c.appendChild(e);setTimeout(()=>e.remove(),undo?6000:3000)},
+doUndo(btn){if(this._undo){this._undo();this._undo=null;btn.closest('.tt').remove();this.render();this.toast('↩️ Ação desfeita')}},
+sm(t,b,f=''){document.getElementById('mt').textContent=t;document.getElementById('mb').innerHTML=b;document.getElementById('mf').innerHTML=f;document.getElementById('mo').classList.add('on')},
+cm(){document.getElementById('mo').classList.remove('on')},
+q(){return this.d.quotes[Math.floor(Math.random()*this.d.quotes.length)]},
+da(ds){if(!ds)return 999;return Math.floor((Date.now()-new Date(ds).getTime())/864e5)},
+rd(ds){if(!ds)return'Sem contato';const d=this.da(ds);if(d===0)return'Hoje';if(d===1)return'Ontem';if(d<7)return`${d} dias atrás`;if(d<30)return`${Math.floor(d/7)} sem. atrás`;if(d<365)return`${Math.floor(d/30)} meses atrás`;return`${Math.floor(d/365)} ano(s) atrás`},
+rc(d){if(d<=30)return'l';if(d<=60)return'm';if(d<=90)return'h';return'c'},
+rb(d){if(d<=30)return'<span class="bd-g bdg">🟢 Em dia</span>';if(d<=60)return'<span class="bd-g bdy">🟡 Atenção</span>';if(d<=90)return'<span class="bd-g bdo">🟠 Risco</span>';return'<span class="bd-g bdr">🔴 Crítico</span>'},
+lc(fid){const r=this.d.records.filter(r=>r.fid===fid);if(!r.length)return null;return r.sort((a,b)=>new Date(b.dt)-new Date(a.dt))[0].dt},
+xp(){return this.d.records.length*10+this.d.miracles.length*25},
+lvl(){const x=this.xp();const l=[...this.d.levels].sort((a,b)=>b.x-a.x);for(let i of l)if(x>=i.x)return i;return this.d.levels[0]},
+avC(n){const i=(n||'?').charAt(0).toUpperCase();const ci=n?n.charCodeAt(0)%this.COLORS.length:0;return`<div class="av" style="background:${this.COLORS[ci]}">${i}</div>`},
+avCS(n){const i=(n||'?').charAt(0).toUpperCase();const ci=n?n.charCodeAt(0)%this.COLORS.length:0;return`<div class="av av-sm" style="background:${this.COLORS[ci]}">${i}</div>`},
+avCL(n){const i=(n||'?').charAt(0).toUpperCase();const ci=n?n.charCodeAt(0)%this.COLORS.length:0;return`<div class="av av-lg" style="background:${this.COLORS[ci]}">${i}</div>`},
+today(){return new Date().toISOString().split('T')[0]},
+mp(){const w=this.wk();const m=this.d['ms_'+w]||{};const it=[{k:'visit',l:'Fazer 1 visita',i:'🏠'},{k:'c1',l:'Fazer 1 contato',i:'📞'},{k:'c2',l:'Fazer 2º contato',i:'📞'},{k:'spi',l:'Compartilhar mensagem espiritual',i:'📖'},{k:'inv',l:'Fazer um convite',i:'🎉'},{k:'need',l:'Identificar necessidade',i:'🔍'}];return{it,m,dn:it.filter(i=>m[i.k]).length,tt:it.length,w}},
+wk(){const d=new Date();const s=new Date(d.getFullYear(),0,1);return d.getFullYear()+'w'+Math.ceil(((d-s)/864e5+s.getDay()+1)/7)},
+tm(){const n=new Date();return this.d.records.filter(r=>{const d=new Date(r.dt);return d.getMonth()===n.getMonth()&&d.getFullYear()===n.getFullYear()})},
+hasPerm(p){const pr=this.d.permissions[this.d.profile];return pr==='all'||pr===p||p==='basic'},
+
+fab(){
+const v=this.v;
+if(v==='families')this.ffm();else if(v==='companions')this.cfm();else if(v==='needs')this.nfm();
+else if(v==='records')this.rfm();else if(v==='neighborhoods')this.nbfm();else if(v==='calendar')this.efm();
+else if(v==='planner')this.pfm();else if(v==='messages')this.msgfm();else if(v==='miracles')this.mrfm();
+else if(v==='today')this.rfm();else if(v==='actions')this.pfm();else if(v==='activities')this.actfm();
+else if(v==='documents')this.docfm()
+},
+keys(){document.addEventListener('keydown',e=>{if(e.key==='/'&&!e.ctrlKey&&document.activeElement.tagName!=='INPUT'&&document.activeElement.tagName!=='TEXTAREA'){e.preventDefault();this.showSearch()}if(e.key==='Escape')this.cm()})},
+meeting(){document.body.classList.toggle('meeting');const on=document.body.classList.contains('meeting');document.getElementById('meetBtn').innerHTML=`<span class="ic">${on?'📺':'📺'}</span>${on?'Sair Reunião':'Modo Reunião'}`;this.toast(on?'📺 Modo reunião ativado':'📺 Modo normal')},
+reset(){if(confirm('Reiniciar todo o sistema? Todos os dados serão perdidos.')){localStorage.removeItem('md');location.reload()}},
+checkAlerts(){const n=document.getElementById('nb');const has=this.d.families.some(f=>this.da(this.lc(f.id))>=30)||this.d.needs.some(n=>n.st!=='ok'&&n.st!=='done');n.classList.toggle('has-notif',has)},
+
+showSearch(){this.sm('🔍 Pesquisa Global',`<div class="fg"><input class="fi" id="gs" placeholder="Pesquisar famílias, registros..." oninput="A.doSearch(this.value)" autofocus></div><div id="sr"></div>`)},
+doSearch(q){if(!q||q.length<2){document.getElementById('sr').innerHTML='';return}q=q.toLowerCase();let h='';
+const f=this.d.families.filter(f=>f.nm.toLowerCase().includes(q)||(f.ad||'').toLowerCase().includes(q));
+if(f.length){h+='<p style="font-weight:600;margin:8px 0">👥 Famílias</p>';f.forEach(x=>{h+=`<div class="li" style="cursor:pointer" onclick="A.cm();A.go('families');setTimeout(()=>A.fdet('${x.id}'),100)">${this.avCS(x.nm)}<span>${x.nm}</span></div>`})}
+const r=this.d.records.filter(r=>(r.desc||'').toLowerCase().includes(q));
+if(r.length){h+='<p style="font-weight:600;margin:8px 0">📝 Registros</p>';r.slice(0,5).forEach(x=>{h+=`<div class="li">${x.dt} - ${x.tp}: ${(x.desc||'').substring(0,40)}</div>`})}
+if(!h)h='<div class="es"><p>Nenhum resultado</p></div>';document.getElementById('sr').innerHTML=h},
+
+showAlerts(){
+const al=[];
+this.d.families.forEach(f=>{const d=this.da(this.lc(f.id));if(d>=30)al.push({i:'⚠️',t:`${f.nm} — ${this.rd(this.lc(f.id))}`,p:d})});
+this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').forEach(n=>{const f=this.d.families.find(x=>x.id===n.fid);al.push({i:n.pr==='Urgente'?'🔴':'📋',t:`${n.cat}: ${f?.nm||'?'} — ${(n.desc||'').substring(0,30)}`,p:n.pr==='Urgente'?999:50})});
+this.d.families.forEach(f=>{if(f.bd){const b=new Date(f.bd),t=new Date();b.setFullYear(t.getFullYear());const df=Math.floor((b-t)/864e5);if(df>=0&&df<=7)al.push({i:'🎂',t:`Aniversário: ${f.nm} ${df===0?'HOJE':'em '+df+' dia(s)'}`,p:200-df})}});
+al.sort((a,b)=>b.p-a.p);
+this.sm('🔔 Alertas',al.length?al.map(a=>`<div class="li">${a.i} ${a.t}</div>`).join(''):'<div class="es"><div class="ei">✅</div><p>Nenhum alerta!</p></div>')},
+
+// ═══ SETUP ═══
+setup(){document.getElementById('sb').classList.add('shut');document.getElementById('hd').classList.add('full');document.getElementById('mn').classList.add('full');this._ss=1;this._sr()},
+_sr(){
+const m=document.getElementById('mn');
+let h='<div class="ws fade"><div class="wz"><div class="wzs'+(this._ss>=1?' on':'')+(this._ss>1?' ok':'')+'">1</div><div class="wzs'+(this._ss>=2?' on':'')+(this._ss>2?' ok':'')+'">2</div><div class="wzs'+(this._ss>=3?' on':'')+'">3</div></div>';
+if(this._ss===1){
+h+=`<div style="font-size:48px">🤝</div><h2 style="margin:8px 0">Companheiros de Ministração</h2><p style="color:var(--tx2);margin-bottom:20px;font-size:13px">Quem são vocês?</p>
+<div style="max-width:380px;width:100%;text-align:left">
+<div class="fg"><label class="fl">Nome do Companheiro 1</label><input class="fi" id="s1n" value="${this.d.companions[0]?.nm||''}"></div>
+<div class="fg"><label class="fl">Telefone</label><input class="fi" id="s1p" value="${this.d.companions[0]?.ph||''}"></div>
+<div class="fg"><label class="fl">Nome do Companheiro 2</label><input class="fi" id="s2n" value="${this.d.companions[1]?.nm||''}"></div>
+<div class="fg"><label class="fl">Telefone</label><input class="fi" id="s2p" value="${this.d.companions[1]?.ph||''}"></div>
+<button class="bt bp bbl blg" onclick="A._s1()">SALVAR COMPANHEIROS →</button></div>`
+}else if(this._ss===2){
+h+=`<div style="font-size:48px">👥</div><h2 style="margin:8px 0">Famílias Designadas</h2><p style="color:var(--tx2);margin-bottom:20px;font-size:13px">Cadastre as famílias</p>
+<div style="max-width:460px;width:100%;text-align:left"><div id="sfl">`;
+this.d.families.forEach(f=>{h+=`<div class="fc" style="cursor:default">${this.avCS(f.nm)}<div style="flex:1"><div class="fn">${f.nm}</div><div class="fd">${f.ph||''}</div></div><button class="bt bsm bd" onclick="A._srf('${f.id}')">🗑</button></div>`});
+h+=`</div><div class="cd" style="margin-top:12px">
+<div class="fg"><label class="fl">Nome da Família</label><input class="fi" id="sfn"></div>
+<div class="fg"><label class="fl">Telefone</label><input class="fi" id="sfp"></div>
+<div class="fg"><label class="fl">Endereço</label><input class="fi" id="sfa"></div>
+<div class="fg"><label class="fl">Bairro</label><input class="fi" id="sfb"></div>
+<button class="bt ba bbl" onclick="A._saf()">➕ Adicionar Família</button></div>
+<div style="display:flex;gap:8px;margin-top:12px"><button class="bt bo" onclick="A._ss=1;A._sr()">← Voltar</button><button class="bt bp" style="flex:1" onclick="A._ss=3;A._sr()">Continuar →</button></div></div>`
+}else{
+h+=`<div style="font-size:48px" class="celeb">✅</div><h2 style="margin:12px 0;color:var(--ok)">Sistema Pronto!</h2>
+<div style="max-width:380px;text-align:left;margin-bottom:20px"><div class="al al-s">✅ Companheiros: ${this.d.companions.length}</div><div class="al al-s">✅ Famílias: ${this.d.families.length}</div><div class="al al-s">✅ Pronto para uso</div></div>
+<button class="bt bp blg" onclick="A._sf()">🛠️ COMEÇAR A MINISTRAR</button><br><button class="bt bo" style="margin-top:8px" onclick="A._ss=2;A._sr()">← Voltar</button>`
+}
+h+='</div>';m.innerHTML=h
+},
+_s1(){const c1={id:this.uid(),nm:document.getElementById('s1n').value.trim(),ph:document.getElementById('s1p').value};const c2={id:this.uid(),nm:document.getElementById('s2n').value.trim(),ph:document.getElementById('s2p').value};this.d.companions=[c1];if(c2.nm)this.d.companions.push(c2);this.save();this._ss=2;this._sr();this.toast('✅ Companheiros salvos')},
+_saf(){const n=document.getElementById('sfn').value.trim();if(!n){this.toast('Digite o nome','wr');return}this.d.families.push({id:this.uid(),nm:n,ph:document.getElementById('sfp').value,ad:document.getElementById('sfa').value,nb:document.getElementById('sfb').value,st:'Ativa',cr:this.today(),mb:[],int:'',tal:'',pra:'',ch:'',em:'',wa:'',rg:'',bd:'',obs:'',tags:[]});this.save();this._sr();this.toast('✅ Família adicionada')},
+_srf(id){this.d.families=this.d.families.filter(f=>f.id!==id);this.save();this._sr()},
+_sf(){this.d.setupDone=true;this.save();document.getElementById('sb').classList.remove('shut');document.getElementById('hd').classList.remove('full');document.getElementById('mn').classList.remove('full');this.go('welcome')},
+
+// ═══ WELCOME ═══
+v_welcome(){
+const tf=this.d.families.length,no=this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').length;
+const nc=this.d.families.filter(f=>this.da(this.lc(f.id))>30).length;
+const tm=this.tm().length,mp=this.mp(),lv=this.lvl(),xp=this.xp();
+const ws=this.weekSummary();
+return`<div class="ws">
+<div class="wi">🛠️</div><h1 class="wt">Ministrando à Maneira do Senhor</h1><p class="wst">Cuidando de pessoas como o Salvador cuidaria</p>
+<div class="wsc">"Quando estais a serviço de vosso próximo, estais somente a serviço de vosso Deus."<cite>Mosias 2:17</cite></div>
+<div class="g g4" style="width:100%;max-width:760px;margin-bottom:20px">
+<div class="sc acc" onclick="A.go('families')"><div class="si">👥</div><div class="sv">${nc}</div><div class="sl">Aguardando contato</div></div>
+<div class="sc red" onclick="A.go('needs')"><div class="si">🙏</div><div class="sv">${no}</div><div class="sl">Necessidades abertas</div></div>
+<div class="sc pri" onclick="A.go('mission')"><div class="si">🎯</div><div class="sv">${mp.dn}/${mp.tt}</div><div class="sl">Missão da semana</div></div>
+<div class="sc grn" onclick="A.go('impact')"><div class="si">⭐</div><div class="sv">${tm}</div><div class="sl">Impacto do mês</div></div>
+</div>
+${ws?`<div class="al al-i" style="max-width:500px;width:100%;margin-bottom:14px">${ws}</div>`:''}
+<div class="lvl" style="max-width:380px;width:100%"><div class="lvi">${lv.i}</div><div style="flex:1"><div class="lvn">${lv.n}</div><div class="lvx">${xp} XP</div><div class="pr" style="margin-top:4px"><div class="pb" style="width:${Math.min(100,xp/10)}%"></div></div></div></div>
+<div class="ib" style="max-width:460px;width:100%">"${this.q()}"</div>
+<button class="bt bp blg" onclick="A.go('today')">🛠️ COMEÇAR A MINISTRAR</button>
+</div>`
+},
+weekSummary(){
+const w=new Date(),s=new Date(w);s.setDate(s.getDate()-7);
+const wr=this.d.records.filter(r=>new Date(r.dt)>=s);
+if(!wr.length)return'';
+const v=wr.filter(r=>r.tp==='Visita').length,c=wr.filter(r=>['Ligação','Mensagem','WhatsApp'].includes(r.tp)).length;
+const fams=[...new Set(wr.map(r=>r.fid))].length;
+return`📊 Esta semana: ${v} visita(s), ${c} contato(s), ${fams} família(s) atendida(s)`
+},
+
+// ═══ TODAY ═══
+v_today(){
+let cds=[];
+this.d.families.forEach(f=>{const d=this.da(this.lc(f.id));if(d>30)cds.push({f,d,tp:'nc',p:d,i:'📞',l:`${this.rd(this.lc(f.id))}`,a:'Ligar'})});
+this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').forEach(n=>{const f=this.d.families.find(x=>x.id===n.fid);if(f)cds.push({f,tp:'nd',p:n.pr==='Urgente'?500:100,i:'🤝',l:`Necessidade: ${n.cat}`,a:'Ajudar',nid:n.id})});
+this.d.families.forEach(f=>{if(f.bd){const b=new Date(f.bd),t=new Date();b.setFullYear(t.getFullYear());const df=Math.ceil((b-t)/864e5);if(df>=0&&df<=7)cds.push({f,tp:'bd',p:200-df,i:'🎂',l:df===0?'Aniversário HOJE!':'Aniversário em '+df+' dia(s)',a:'Parabenizar'})}});
+cds.sort((a,b)=>b.p-a.p);
+let h=`<div class="sh"><div><div class="st">🔧 A QUEM POSSO SERVIR HOJE?</div><div class="sst">Famílias que precisam de você</div></div></div><div class="ib">"${this.q()}"</div>`;
+if(!cds.length)h+=`<div class="es"><div class="ei">✅</div><p>Todas as famílias estão bem acompanhadas!</p><button class="bt bp" onclick="A.rfm()">📝 Registrar Ação</button></div>`;
+else cds.forEach(c=>{
+h+=`<div class="ac${c.tp==='nd'?' urg':''}"><div style="display:flex;justify-content:space-between;align-items:center">
+<div style="display:flex;align-items:center;gap:10px">${this.avCS(c.f.nm)}<div><div class="at">${c.f.nm}</div><div class="ad">${c.i} ${c.l}</div></div></div>
+${this.rb(c.d||0)}</div>
+<div class="ab"><button class="bt bsm bp" onclick="A.rfm('${c.f.id}')">${c.i} ${c.a}</button><button class="bt bsm bo" onclick="A.fdet('${c.f.id}')">Ver</button>${c.nid?`<button class="bt bsm bs" onclick="A.rn('${c.nid}')">✅ Resolvido</button>`:''}</div></div>`});
+return h
+},
+rn(id){const n=this.d.needs.find(x=>x.id===id);if(n){n.st='ok';n.ra=this.today();this.save();this.render();this.toast('✅ Necessidade resolvida')}},
+
+// ═══ DASHBOARD ═══
+v_dashboard(){
+const t=this.d.families.length,tm=this.tm();
+const vis=tm.filter(r=>r.tp==='Visita').length,cal=tm.filter(r=>r.tp==='Ligação').length;
+const msg=tm.filter(r=>['Mensagem','WhatsApp'].includes(r.tp)).length;
+const spi=tm.filter(r=>r.tp==='Compartilhamento Espiritual').length;
+const ci=[...new Set(tm.map(r=>r.fid))],no=this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').length;
+const urg=this.d.needs.filter(n=>n.pr==='Urgente'&&n.st!=='ok'&&n.st!=='done').length;
+const att=this.d.families.filter(f=>this.da(this.lc(f.id))>60).length;
+const pct=Math.round(ci.length/Math.max(t,1)*100);
+return`<div class="ib">"${this.q()}"</div>
+<div class="g g4" style="margin-bottom:20px">
+<div class="sc pri"><div class="si">👥</div><div class="sv">${t}</div><div class="sl">Total de Famílias</div></div>
+<div class="sc grn"><div class="si">✅</div><div class="sv">${ci.length}</div><div class="sl">Fortalecidas</div></div>
+<div class="sc pri"><div class="si">🏠</div><div class="sv">${vis}</div><div class="sl">Visitas</div></div>
+<div class="sc pri"><div class="si">📞</div><div class="sv">${cal}</div><div class="sl">Ligações</div></div>
+<div class="sc pri"><div class="si">💬</div><div class="sv">${msg}</div><div class="sl">Mensagens</div></div>
+<div class="sc pri"><div class="si">🙏</div><div class="sv">${spi}</div><div class="sl">Espiritual</div></div>
+<div class="sc ${no?'orn':'grn'}"><div class="si">📋</div><div class="sv">${no}</div><div class="sl">Abertas</div></div>
+<div class="sc ${urg?'red':'grn'}"><div class="si">🔴</div><div class="sv">${urg}</div><div class="sl">Urgentes</div></div>
+<div class="sc ${att?'orn':'grn'}"><div class="si">⚠️</div><div class="sv">${att}</div><div class="sl">Em Atenção</div></div>
+<div class="sc acc"><div class="si">🎯</div><div class="sv">${pct}%</div><div class="sl">Meta</div></div>
+</div>
+<div class="cd"><div class="cd-t">📊 Progresso do Mês</div><p style="font-size:12px;color:var(--tx2);margin:8px 0">${ci.length} de ${t} famílias cuidadas</p><div class="pr" style="height:10px"><div class="pb" style="width:${pct}%"></div></div></div>
+<div class="cd" style="margin-top:14px"><div class="cd-t">📈 Atividades por Tipo</div><canvas id="dashChart" class="chart-canvas" height="160" style="margin-top:12px"></canvas></div>`
+},
+a_dashboard(){
+const cv=document.getElementById('dashChart');if(!cv)return;
+const ctx=cv.getContext('2d');const tm=this.tm();
+const types=['Visita','Ligação','Mensagem','WhatsApp','Ajuda','Oração'];
+const vals=types.map(t=>tm.filter(r=>r.tp===t).length);
+const max=Math.max(...vals,1);
+const w=cv.width=cv.parentElement.clientWidth-32;const h=cv.height=160;
+ctx.clearRect(0,0,w,h);
+const bw=Math.min(40,(w-types.length*8)/types.length);
+const gap=(w-types.length*bw)/(types.length+1);
+types.forEach((t,i)=>{
+const x=gap+(bw+gap)*i;const bh=vals[i]/max*(h-40);const y=h-25-bh;
+const g=ctx.createLinearGradient(x,y,x,h-25);g.addColorStop(0,'#3B6B9E');g.addColorStop(1,'#6B9FCC');
+ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(x,y,bw,bh,4);ctx.fill();
+ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--tx2');ctx.font='10px sans-serif';ctx.textAlign='center';
+ctx.fillText(vals[i],x+bw/2,y-4);ctx.fillText(t.substring(0,4),x+bw/2,h-8)
+})
+},
+
+// ═══ MISSION ═══
+v_mission(){const{it,m,dn,tt}=this.mp();const p=Math.round(dn/tt*100);let h=`<div class="sh"><div><div class="st">🎯 Missão da Semana</div><div class="sst">${dn}/${tt} concluídas</div></div></div><div class="pr" style="height:10px;margin-bottom:20px"><div class="pb" style="width:${p}%"></div></div>`;if(dn===tt)h+=`<div style="text-align:center;padding:20px"><div style="font-size:44px" class="celeb">🎉</div><h2 style="color:var(--ok)">MISSÃO COMPLETA!</h2></div>`;it.forEach(i=>{h+=`<div class="mi${m[i.k]?' dn':''}" onclick="A.tm2('${i.k}')"><div class="mc">${m[i.k]?'✓':''}</div><span>${i.i} ${i.l}</span></div>`});return h},
+tm2(k){const w=this.wk();if(!this.d['ms_'+w])this.d['ms_'+w]={};this.d['ms_'+w][k]=!this.d['ms_'+w][k];this.save();this.render();const{dn,tt}=this.mp();if(dn===tt)this.toast('🎉 Missão completa!');else this.toast('✅ Atualizado')},
+
+// ═══ ACTIONS ═══
+v_actions(){
+let it=[];
+this.d.families.forEach(f=>{const d=this.da(this.lc(f.id));if(d>30)it.push({t:`Contatar ${f.nm} (${this.rd(this.lc(f.id))})`,fid:f.id,p:d})});
+this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').forEach(n=>{const f=this.d.families.find(x=>x.id===n.fid);it.push({t:`${n.cat}: ${f?.nm||'?'}`,fid:n.fid,p:n.pr==='Urgente'?500:100})});
+(this.d.planner||[]).filter(p=>!p.dn).forEach(p=>{it.push({t:p.tx,p:50,pid:p.id})});
+it.sort((a,b)=>b.p-a.p);
+let h=`<div class="sh"><div><div class="st">📌 Próximas Ações</div><div class="sst">${it.length} pendentes</div></div><button class="bt bp bsm" onclick="A.pfm()">➕ Nova</button></div>`;
+if(!it.length)h+='<div class="es"><div class="ei">✅</div><p>Nenhuma ação pendente!</p></div>';
+else it.forEach(i=>{h+=`<div class="ac"><div class="at">${i.t}</div><div class="ab"><button class="bt bsm bs" onclick="A.cpa('${i.pid||''}','${i.fid||''}')">✅ Concluir</button>${i.fid?`<button class="bt bsm bo" onclick="A.fdet('${i.fid}')">Ver</button>`:''}</div></div>`});
+return h
+},
+cpa(pid,fid){if(pid){const p=this.d.planner.find(x=>x.id===pid);if(p)p.dn=true;this.save();this.render();this.toast('✅ Concluído')}else if(fid)this.rfm(fid)},
+
+// ═══ FAMILIES ═══
+v_families(){
+let h=`<div class="sh"><div><div class="st">👥 Famílias</div><div class="sst">${this.d.families.length} cadastradas</div></div><div class="bg"><button class="bt bp bsm" onclick="A.ffm()">➕ Nova</button><button class="bt bo bsm" onclick="A.impCSV()">📥 Importar</button><button class="bt bo bsm" onclick="A.expCSV()">📤 CSV</button></div></div>
+<div class="fb"><input class="fi" placeholder="🔍 Pesquisar..." id="ffs" oninput="A.ff()" style="flex:1;min-width:180px"><select class="fs" id="ffr" onchange="A.ff()" style="width:auto"><option value="">Todos</option><option value="l">🟢 Em dia</option><option value="m">🟡 Atenção</option><option value="h">🟠 Risco</option><option value="c">🔴 Crítico</option></select></div><div id="ffl">`;
+this.d.families.forEach(f=>{const lc=this.lc(f.id),d=this.da(lc),r=this.rc(d);
+h+=`<div class="fc r${r}" data-r="${r}" data-n="${f.nm.toLowerCase()}" onclick="A.fdet('${f.id}')">
+${this.avC(f.nm)}<div style="flex:1;min-width:0"><div class="fn">${f.nm}${f.tags?.length?f.tags.map(t=>`<span class="tag" style="background:${t.c||'var(--bg4)'};color:#fff;margin-left:4px">${t.n}</span>`).join(''):''}</div>
+<div class="fd">${f.ph||''} · ${f.nb||'—'} · <span class="rd">${this.rd(lc)}</span></div></div>
+<div class="fa" onclick="event.stopPropagation()">${this.rb(d)}<button class="bt bsm bp bic" onclick="A.rfm('${f.id}')" title="Registrar">📝</button></div></div>`});
+if(!this.d.families.length)h+='<div class="es"><div class="ei">👥</div><p>Nenhuma família</p><button class="bt bp" onclick="A.ffm()">➕ Adicionar</button></div>';
+h+='</div>';return h
+},
+ff(){const q=(document.getElementById('ffs')?.value||'').toLowerCase(),f=document.getElementById('ffr')?.value||'';document.querySelectorAll('#ffl .fc').forEach(e=>{e.style.display=(!q||e.dataset.n.includes(q))&&(!f||e.dataset.r===f)?'':'none'})},
+
+ffm(fam){
+const f=fam||{};
+const nb=this.d.neighborhoods.map(n=>`<option value="${n.nm}" ${f.nb===n.nm?'selected':''}>${n.nm}</option>`).join('');
+const rg=this.d.regions.map(r=>`<option value="${r.nm}" ${f.rg===r.nm?'selected':''}>${r.nm}</option>`).join('');
+const tgs=this.d.tags?.map(t=>`<label style="display:flex;align-items:center;gap:4px;font-size:12px"><input type="checkbox" value="${t.n}" ${(f.tags||[]).some(x=>x.n===t.n)?'checked':''}><span class="tag" style="background:${t.c}">${t.n}</span></label>`).join('')||'';
+this.sm(f.id?'✏️ Editar Família':'➕ Nova Família',`
+<div class="fg"><label class="fl">Nome *</label><input class="fi" id="fn" value="${f.nm||''}"></div>
+<div class="g g2"><div class="fg"><label class="fl">Telefone</label><input class="fi" id="fp" value="${f.ph||''}"></div><div class="fg"><label class="fl">WhatsApp</label><input class="fi" id="fw" value="${f.wa||''}"></div></div>
+<div class="fg"><label class="fl">E-mail</label><input class="fi" id="fe" value="${f.em||''}"></div>
+<div class="fg"><label class="fl">Endereço</label><input class="fi" id="fa" value="${f.ad||''}"></div>
+<div class="g g2"><div class="fg"><label class="fl">Bairro</label><select class="fs" id="fb"><option value="">—</option>${nb}<option value="__n">+ Novo</option></select></div><div class="fg"><label class="fl">Região</label><select class="fs" id="fr"><option value="">—</option>${rg}</select></div></div>
+<div class="fg"><label class="fl">Aniversário</label><input class="fi" type="date" id="fbd" value="${f.bd||''}"></div>
+<div class="fg"><label class="fl">Integrantes</label><input class="fi" id="fmb" value="${(f.mb||[]).join(', ')}" placeholder="Nome, Nome..."></div>
+${tgs?`<div class="fg"><label class="fl">Tags</label><div style="display:flex;flex-wrap:wrap;gap:6px" id="ftags">${tgs}</div></div>`:''}
+<h4 style="margin:14px 0 8px;font-size:13px">📋 Perfil</h4>
+<div class="fg"><label class="fl">Interesses / Hobbies</label><input class="fi" id="fi" value="${f.int||''}"></div>
+<div class="fg"><label class="fl">Talentos / Profissões</label><input class="fi" id="ft" value="${f.tal||''}"></div>
+<div class="fg"><label class="fl">Pedido de Oração</label><textarea class="ft" id="fpr" rows="2">${f.pra||''}</textarea></div>
+<div class="fg"><label class="fl">Desafios Atuais</label><textarea class="ft" id="fch" rows="2">${f.ch||''}</textarea></div>
+<h4 style="margin:14px 0 8px;font-size:13px">🙏 Perfil Espiritual</h4>
+<div class="fg"><label class="fl">Participação Sacramental</label><select class="fs" id="fsp"><option ${f.sac==='Regular'?'selected':''}>Regular</option><option ${f.sac==='Eventual'?'selected':''}>Eventual</option><option ${f.sac==='Rara'?'selected':''}>Rara</option><option ${f.sac==='Não participa'?'selected':''}>Não participa</option></select></div>
+<div class="fg"><label class="fl">Templo / Chamados / Metas</label><textarea class="ft" id="fse" rows="2">${f.spe||''}</textarea></div>
+<div class="fg"><label class="fl">Observações</label><textarea class="ft" id="fo" rows="2">${f.obs||''}</textarea></div>
+<div class="fg"><label class="fl">Status</label><select class="fs" id="fst"><option ${f.st==='Ativa'?'selected':''}>Ativa</option><option ${f.st==='Inativa'?'selected':''}>Inativa</option><option ${f.st==='Mudou'?'selected':''}>Mudou</option><option ${f.st==='Nova'?'selected':''}>Nova</option><option ${f.st==='Converso Recente'?'selected':''}>Converso Recente</option></select></div>
+`,`<button class="bt bp" onclick="A.fsv('${f.id||''}')">💾 Salvar</button>${f.id?`<button class="bt bd" onclick="A.fdel('${f.id}')">🗑</button><button class="bt bo" onclick="A.fdup('${f.id}')">📋 Duplicar</button>`:''}`);
+},
+fsv(id){
+const nm=document.getElementById('fn').value.trim();if(!nm){this.toast('Nome obrigatório','wr');document.getElementById('fn').classList.add('err');return}
+let nb=document.getElementById('fb').value;if(nb==='__n'){nb=prompt('Novo bairro:');if(nb)this.d.neighborhoods.push({id:this.uid(),nm:nb,cl:'#3B6B9E',rp:''});else nb=''}
+const tags=[];document.querySelectorAll('#ftags input:checked')?.forEach(i=>{const t=this.d.tags?.find(x=>x.n===i.value);if(t)tags.push(t)});
+const o={nm,ph:document.getElementById('fp').value,wa:document.getElementById('fw').value,em:document.getElementById('fe').value,ad:document.getElementById('fa').value,nb,rg:document.getElementById('fr').value,bd:document.getElementById('fbd').value,mb:document.getElementById('fmb').value.split(',').map(s=>s.trim()).filter(Boolean),int:document.getElementById('fi').value,tal:document.getElementById('ft').value,pra:document.getElementById('fpr').value,ch:document.getElementById('fch').value,sac:document.getElementById('fsp').value,spe:document.getElementById('fse').value,obs:document.getElementById('fo').value,st:document.getElementById('fst').value,tags};
+if(id){const i=this.d.families.findIndex(f=>f.id===id);if(i>=0)Object.assign(this.d.families[i],o)}
+else{o.id=this.uid();o.cr=this.today();this.d.families.push(o)}
+this.save();this.cm();this.render();this.toast('✅ Família salva')
+},
+fdel(id){
+const bk=this.d.families.find(f=>f.id===id);
+this._undo=()=>{this.d.families.push(bk);this.save()};
+this.d.families=this.d.families.filter(f=>f.id!==id);
+this.d.records=this.d.records.filter(r=>r.fid!==id);
+this.save();this.cm();this.render();this.toast('🗑 Família excluída','wr',true)
+},
+fdup(id){const f=this.d.families.find(x=>x.id===id);if(f){const c={...JSON.parse(JSON.stringify(f)),id:this.uid(),nm:f.nm+' (cópia)'};this.d.families.push(c);this.save();this.cm();this.render();this.toast('📋 Família duplicada')}},
+
+fdet(id){
+const f=this.d.families.find(x=>x.id===id);if(!f)return;
+const lc=this.lc(id),d=this.da(lc);
+const recs=this.d.records.filter(r=>r.fid===id).sort((a,b)=>new Date(b.dt)-new Date(a.dt));
+const nds=this.d.needs.filter(n=>n.fid===id);
+// Trend analysis
+const prev=recs.filter(r=>{const dt=new Date(r.dt),n=new Date();n.setMonth(n.getMonth()-1);const p=new Date(n);p.setMonth(p.getMonth()-1);return dt>=p&&dt<n}).length;
+const curr=recs.filter(r=>{const dt=new Date(r.dt),n=new Date();n.setMonth(n.getMonth()-1);return dt>=n}).length;
+const trend=curr>prev?'📈 Melhorando':curr<prev?'📉 Declinando':'➡️ Estável';
+
+let tl='';recs.slice(0,10).forEach(r=>{tl+=`<div class="tl-i"><div class="tl-d">${this.rd(r.dt)}</div><div class="tl-c"><strong>${r.tp}</strong>: ${r.desc||'—'}</div></div>`});
+this.sm(`👥 ${f.nm}`,`
+<div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">${this.avCL(f.nm)}<div><h3>${f.nm}</h3><div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px">${this.rb(d)}<span class="bd-g bdp">${f.st||'Ativa'}</span><span class="bd-g bda">${trend}</span>${f.nb?`<span class="chip">📍 ${f.nb}</span>`:''}</div>
+${f.tags?.length?`<div style="margin-top:4px">${f.tags.map(t=>`<span class="tag" style="background:${t.c};color:#fff">${t.n}</span>`).join('')}</div>`:''}</div></div>
+${f.ph?`<p style="font-size:12px">📞 ${f.ph}</p>`:''}${f.wa?`<p style="font-size:12px">📱 ${f.wa}</p>`:''}${f.em?`<p style="font-size:12px">📧 ${f.em}</p>`:''}${f.ad?`<p style="font-size:12px">🏠 ${f.ad}</p>`:''}
+${f.mb?.length?`<p style="font-size:12px">👥 ${f.mb.join(', ')}</p>`:''}${f.int?`<p style="font-size:12px">⭐ ${f.int}</p>`:''}${f.tal?`<p style="font-size:12px">🔧 ${f.tal}</p>`:''}
+${f.pra?`<div class="al al-i">🙏 ${f.pra}</div>`:''}${f.ch?`<div class="al al-w">⚠️ ${f.ch}</div>`:''}
+${f.sac?`<p style="font-size:11px;color:var(--tx2)">⛪ Sacramental: ${f.sac}</p>`:''}${f.spe?`<p style="font-size:11px;color:var(--tx2)">🙏 ${f.spe}</p>`:''}
+${f.obs?`<p style="font-size:11px;color:var(--tx3)">📝 ${f.obs}</p>`:''}
+${nds.length?`<h4 style="margin:12px 0 6px;font-size:13px">📋 Necessidades</h4>${nds.map(n=>`<div class="al ${n.st==='ok'||n.st==='done'?'al-s':'al-w'}">${n.cat}: ${n.desc||''} <span class="bd-g bdp">${n.pr}</span> ${n.st}</div>`).join('')}`:''}
+<h4 style="margin:12px 0 6px;font-size:13px">📅 Linha do Tempo</h4>
+${tl?`<div class="tl">${tl}</div>`:'<p style="color:var(--tx3);font-size:12px">Nenhum registro</p>'}
+<div class="bg" style="margin-top:14px"><button class="bt bsm bp" onclick="A.cm();A.rfm('${id}')">📝 Registrar</button><button class="bt bsm ba" onclick="A.cm();A.nfm('${id}')">📋 Necessidade</button><button class="bt bsm bo" onclick="A.cm();A.ffm(A.d.families.find(f=>f.id==='${id}'))">✏️ Editar</button></div>`)
+},
+
+impCSV(){this.sm('📥 Importar Famílias',`<p style="font-size:12px;color:var(--tx2);margin-bottom:12px">Formato CSV: Nome,Telefone,Endereço,Bairro (uma família por linha)</p><textarea class="ft" id="csvData" rows="8" placeholder="Silva,1199999,Rua A,Centro\nSantos,1188888,Rua B,Norte"></textarea>`,`<button class="bt bp" onclick="A.doImpCSV()">📥 Importar</button>`)},
+doImpCSV(){const d=document.getElementById('csvData').value.trim();if(!d)return;const lines=d.split('\n');let c=0;lines.forEach(l=>{const p=l.split(',').map(s=>s.trim());if(p[0]){this.d.families.push({id:this.uid(),nm:p[0],ph:p[1]||'',ad:p[2]||'',nb:p[3]||'',st:'Ativa',cr:this.today(),mb:[],int:'',tal:'',pra:'',ch:'',em:'',wa:'',rg:'',bd:'',obs:'',tags:[]});c++}});this.save();this.cm();this.render();this.toast(`✅ ${c} famílias importadas`)},
+expCSV(){let c='Nome,Telefone,Bairro,Status,Último Contato,Dias\n';this.d.families.forEach(f=>{const lc=this.lc(f.id),d=this.da(lc);c+=`"${f.nm}","${f.ph||''}","${f.nb||''}","${f.st||''}","${lc||''}",${d}\n`});const b=new Blob([c],{type:'text/csv'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`familias_${this.today()}.csv`;a.click();this.toast('📤 CSV exportado')},
+
+// ═══ RECORDS ═══
+v_records(){
+const recs=this.d.records.sort((a,b)=>new Date(b.dt)-new Date(a.dt));
+let h=`<div class="sh"><div><div class="st">📝 Registros</div><div class="sst">${recs.length} registros</div></div><div class="bg"><button class="bt bp bsm" onclick="A.rfm()">➕ Novo</button><button class="bt bo bsm" onclick="A.expD('records')">📤</button></div></div>
+<div class="fb"><input class="fi" placeholder="🔍 Pesquisar..." oninput="A.frc(this.value)" style="flex:1"></div><div id="rl">`;
+if(!recs.length)h+='<div class="es"><div class="ei">📝</div><p>Nenhum registro</p></div>';
+else recs.forEach(r=>{const f=this.d.families.find(x=>x.id===r.fid);const ic={'Visita':'🏠','Ligação':'📞','Mensagem':'💬','WhatsApp':'📱','Ajuda':'🤝','Serviço':'🔧','Compartilhamento Espiritual':'📖','Convite':'🎉','Oração':'🙏','Apoio Emocional':'🤲'};
+h+=`<div class="ac" data-s="${(r.desc||'').toLowerCase()} ${(f?.nm||'').toLowerCase()}"><div style="display:flex;justify-content:space-between;align-items:center"><div style="display:flex;align-items:center;gap:8px">${f?this.avCS(f.nm):''}<div><div class="at">${ic[r.tp]||'📝'} ${r.tp} — ${f?.nm||'?'}</div><div class="ad"><span class="rd">${this.rd(r.dt)}</span> · ${r.desc||''}</div>${r.nx?`<div class="ad" style="color:var(--p)">📌 ${r.nx}</div>`:''}</div></div></div><div class="ab"><button class="bt bsm bo" onclick="A.rec('${r.id}')">✏️</button><button class="bt bsm bd" onclick="A.rdel('${r.id}')">🗑</button></div></div>`});
+h+='</div>';return h
+},
+frc(q){q=q.toLowerCase();document.querySelectorAll('#rl .ac').forEach(e=>{e.style.display=!q||e.dataset.s.includes(q)?'':'none'})},
+
+rfm(fid,tp){
+const fo=this.d.families.map(f=>`<option value="${f.id}" ${f.id===fid?'selected':''}>${f.nm}</option>`).join('');
+const to=this.d.record_types.map(t=>`<option ${t===tp?'selected':''}>${t}</option>`).join('');
+this.sm('📝 Novo Registro',`
+<div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="rd" value="${this.today()}"></div>
+<div class="fg"><label class="fl">Família</label><select class="fs" id="rf"><option value="">—</option>${fo}</select></div>
+<div class="fg"><label class="fl">Tipo</label><select class="fs" id="rt">${to}</select></div>
+<div class="fg"><label class="fl">Descrição</label><textarea class="ft" id="rds" rows="3" placeholder="O que aconteceu?"></textarea></div>
+<div class="fg"><label class="fl">Resultado</label><input class="fi" id="rr" placeholder="Como foi?"></div>
+<div class="fg"><label class="fl">Próxima Ação</label><input class="fi" id="rnx" placeholder="O que fazer em seguida?"></div>
+`,`<button class="bt bp" onclick="A.rsv()">💾 Salvar</button>`)
+},
+rsv(id){
+const fid=document.getElementById('rf').value;if(!fid){this.toast('Selecione família','wr');return}
+const r={id:id||this.uid(),dt:document.getElementById('rd').value,fid,tp:document.getElementById('rt').value,desc:document.getElementById('rds').value,res:document.getElementById('rr').value,nx:document.getElementById('rnx').value};
+if(id){const i=this.d.records.findIndex(x=>x.id===id);if(i>=0)this.d.records[i]=r}else this.d.records.push(r);
+if(r.nx){this.d.planner=this.d.planner||[];this.d.planner.push({id:this.uid(),tx:r.nx,dt:r.dt,fid:r.fid,dn:false})}
+this.save();this.cm();this.render();this.toast('✅ Registro salvo! +10 XP');this.checkAlerts()
+},
+rec(id){const r=this.d.records.find(x=>x.id===id);if(!r)return;this.rfm(r.fid,r.tp);setTimeout(()=>{document.getElementById('rd').value=r.dt;document.getElementById('rds').value=r.desc||'';document.getElementById('rr').value=r.res||'';document.getElementById('rnx').value=r.nx||'';document.getElementById('mf').innerHTML=`<button class="bt bp" onclick="A.rsv('${id}')">💾 Atualizar</button>`},50)},
+rdel(id){const bk=this.d.records.find(r=>r.id===id);this._undo=()=>{this.d.records.push(bk);this.save()};this.d.records=this.d.records.filter(r=>r.id!==id);this.save();this.render();this.toast('🗑 Excluído','wr',true)},
+
+// ═══ COMPANIONS ═══
+v_companions(){
+let h=`<div class="sh"><div><div class="st">🤝 Companheiros</div></div><button class="bt bp bsm" onclick="A.cfm()">➕ Novo</button></div>`;
+if(!this.d.companions.length)h+='<div class="es"><div class="ei">🤝</div><p>Nenhum companheiro</p></div>';
+else{h+='<div class="g ga">';this.d.companions.forEach(c=>{
+const fc=this.d.families.length,rc=this.d.records.length;
+// Engagement
+const tm=this.tm(),ci=[...new Set(tm.map(r=>r.fid))].length;
+const eng=fc?Math.round(ci/fc*100):0;
+h+=`<div class="cd"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">${this.avC(c.nm)}<div><div class="fn">${c.nm}</div><div class="fd">${c.ph||''}</div></div></div>
+<div class="g g3" style="gap:6px;margin-bottom:10px;text-align:center">
+<div><div style="font-size:16px;font-weight:700;color:var(--p)">${fc}</div><div style="font-size:9px;color:var(--tx3)">Famílias</div></div>
+<div><div style="font-size:16px;font-weight:700;color:var(--ok)">${rc}</div><div style="font-size:9px;color:var(--tx3)">Registros</div></div>
+<div><div style="font-size:16px;font-weight:700;color:var(--a)">${eng}%</div><div style="font-size:9px;color:var(--tx3)">Cobertura</div></div>
+</div>
+<div class="pr" style="margin-bottom:8px"><div class="pb" style="width:${eng}%"></div></div>
+<div class="bg"><button class="bt bsm bo" onclick="A.cfm(A.d.companions.find(x=>x.id==='${c.id}'))">✏️</button><button class="bt bsm bd" onclick="A.cdel('${c.id}')">🗑</button></div></div>`});h+='</div>'}
+return h
+},
+cfm(c){c=c||{};this.sm(c.id?'✏️ Editar':'➕ Novo Companheiro',`<div class="fg"><label class="fl">Nome</label><input class="fi" id="cn" value="${c.nm||''}"></div><div class="fg"><label class="fl">Telefone</label><input class="fi" id="cp" value="${c.ph||''}"></div><div class="fg"><label class="fl">Observações</label><textarea class="ft" id="co" rows="2">${c.ob||''}</textarea></div>`,`<button class="bt bp" onclick="A.csv('${c.id||''}')">💾 Salvar</button>`)},
+csv(id){const nm=document.getElementById('cn').value.trim();if(!nm)return;const o={nm,ph:document.getElementById('cp').value,ob:document.getElementById('co').value};if(id){const i=this.d.companions.findIndex(c=>c.id===id);if(i>=0)Object.assign(this.d.companions[i],o)}else{o.id=this.uid();this.d.companions.push(o)}this.save();this.cm();this.render();this.toast('✅ Salvo')},
+cdel(id){this.d.companions=this.d.companions.filter(c=>c.id!==id);this.save();this.render()},
+
+// ═══ NEEDS ═══
+v_needs(){
+const nds=this.d.needs.sort((a,b)=>{const p={Urgente:4,Alta:3,Média:2,Baixa:1};return(p[b.pr]||0)-(p[a.pr]||0)});
+const op=nds.filter(n=>n.st!=='ok'&&n.st!=='done').length;
+let h=`<div class="sh"><div><div class="st">📋 Oportunidades de Servir</div><div class="sst">${op} abertas</div></div><button class="bt bp bsm" onclick="A.nfm()">➕ Nova</button></div>`;
+const ts=['Todas','Aberta','Em Atend.','Resolvida','Concluída'];
+h+=`<div class="tabs">${ts.map(t=>`<div class="tab${t==='Todas'?' on':''}" onclick="A.fn2('${t}')">${t}</div>`).join('')}</div><div id="nl">`;
+if(!nds.length)h+='<div class="es"><div class="ei">📋</div><p>Nenhuma necessidade</p></div>';
+nds.forEach(n=>{const f=this.d.families.find(x=>x.id===n.fid);
+h+=`<div class="ac${n.pr==='Urgente'?' urg':''}" data-st="${n.st}"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="at">${n.cat} — ${f?.nm||'?'}</div><div class="ad">${n.desc||''}</div></div><div class="bg"><span class="bd-g bd${this.d.priorities.find(p=>p.n===n.pr)?.c?.charAt(0)||'p'}">${n.pr}</span><span class="bd-g bdp">${n.st}</span></div></div><div class="ab">${n.st!=='ok'&&n.st!=='done'?`<button class="bt bsm bs" onclick="A.nup('${n.id}')">✅ Avançar</button>`:''}<button class="bt bsm bo" onclick="A.ned('${n.id}')">✏️</button><button class="bt bsm bd" onclick="A.ndel('${n.id}')">🗑</button></div></div>`});
+h+='</div>';return h
+},
+fn2(s){document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.toggle('on',t.textContent===s));const mp={Todas:'',Aberta:'Aberta','Em Atend.':'Atendimento',Resolvida:'Resolvida',Concluída:'ok'};document.querySelectorAll('#nl .ac').forEach(e=>{e.style.display=s==='Todas'||e.dataset.st.includes(mp[s]||s)?'':'none'})},
+nfm(fid){const fo=this.d.families.map(f=>`<option value="${f.id}" ${f.id===fid?'selected':''}>${f.nm}</option>`).join('');const co=this.d.categories.map(c=>`<option>${c}</option>`).join('');const po=this.d.priorities.map(p=>`<option>${p.n}</option>`).join('');this.sm('📋 Nova Necessidade',`<div class="fg"><label class="fl">Família</label><select class="fs" id="nf"><option value="">—</option>${fo}</select></div><div class="fg"><label class="fl">Categoria</label><select class="fs" id="nc">${co}</select></div><div class="fg"><label class="fl">Prioridade</label><select class="fs" id="np">${po}</select></div><div class="fg"><label class="fl">Descrição</label><textarea class="ft" id="nd" rows="3"></textarea></div>`,`<button class="bt bp" onclick="A.nsv()">💾 Salvar</button>`)},
+nsv(id){const fid=document.getElementById('nf').value;if(!fid){this.toast('Selecione família','wr');return}const o={id:id||this.uid(),fid,cat:document.getElementById('nc').value,pr:document.getElementById('np').value,desc:document.getElementById('nd').value,st:'Aberta',cr:this.today()};if(id){const i=this.d.needs.findIndex(n=>n.id===id);if(i>=0)Object.assign(this.d.needs[i],o)}else this.d.needs.push(o);this.save();this.cm();this.render();this.toast('✅ Salvo');this.checkAlerts()},
+ned(id){const n=this.d.needs.find(x=>x.id===id);if(!n)return;this.nfm(n.fid);setTimeout(()=>{document.getElementById('nc').value=n.cat;document.getElementById('np').value=n.pr;document.getElementById('nd').value=n.desc||'';document.getElementById('mf').innerHTML=`<button class="bt bp" onclick="A.nsv('${id}')">💾 Atualizar</button>`},50)},
+nup(id){const n=this.d.needs.find(x=>x.id===id);if(!n)return;const fl={Aberta:'Atendimento',Atendimento:'Resolvida',Resolvida:'ok'};n.st=fl[n.st]||'ok';this.save();this.render();this.toast(`✅ ${n.st}`)},
+ndel(id){this.d.needs=this.d.needs.filter(n=>n.id!==id);this.save();this.render()},
+
+// ═══ ACTIVITIES ═══
+v_activities(){
+const acts=this.d.activities||[];
+let h=`<div class="sh"><div><div class="st">📆 Atividades da Ala</div><div class="sst">${acts.length} atividades</div></div><button class="bt bp bsm" onclick="A.actfm()">➕ Nova</button></div>`;
+if(!acts.length)h+='<div class="es"><div class="ei">📆</div><p>Nenhuma atividade</p></div>';
+else acts.sort((a,b)=>new Date(b.dt)-new Date(a.dt)).forEach(a=>{
+h+=`<div class="ac"><div class="at">${a.tp} — ${a.nm}</div><div class="ad">📅 ${a.dt} ${a.desc?'· '+a.desc:''}</div><div class="ab"><button class="bt bsm bo" onclick="A.actdel('${a.id}')">🗑</button></div></div>`
+});
+return h
+},
+actfm(){this.sm('➕ Nova Atividade',`<div class="fg"><label class="fl">Tipo</label><select class="fs" id="atp"><option>Mutirão</option><option>Conferência</option><option>Serão</option><option>Projeto Humanitário</option><option>Atividade Jovens</option><option>Atividade Missionária</option><option>Atividade Familiar</option></select></div><div class="fg"><label class="fl">Nome</label><input class="fi" id="anm"></div><div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="adt" value="${this.today()}"></div><div class="fg"><label class="fl">Descrição</label><textarea class="ft" id="ads" rows="2"></textarea></div>`,`<button class="bt bp" onclick="A.actsv()">💾 Salvar</button>`)},
+actsv(){const nm=document.getElementById('anm').value.trim();if(!nm)return;this.d.activities=this.d.activities||[];this.d.activities.push({id:this.uid(),tp:document.getElementById('atp').value,nm,dt:document.getElementById('adt').value,desc:document.getElementById('ads').value});this.save();this.cm();this.render();this.toast('✅ Atividade salva')},
+actdel(id){this.d.activities=(this.d.activities||[]).filter(a=>a.id!==id);this.save();this.render()},
+
+// ═══ NEIGHBORHOODS ═══
+v_neighborhoods(){
+let h=`<div class="sh"><div><div class="st">📍 Bairros e Regiões</div></div><div class="bg"><button class="bt bp bsm" onclick="A.nbfm()">➕ Bairro</button><button class="bt ba bsm" onclick="A.rgfm()">➕ Região</button></div></div>`;
+if(this.d.neighborhoods.length){h+='<h3 style="margin-bottom:10px;font-size:14px">📍 Bairros</h3><div class="g ga" style="margin-bottom:20px">';
+this.d.neighborhoods.forEach(n=>{const fs=this.d.families.filter(f=>f.nb===n.nm);const g=fs.filter(f=>this.rc(this.da(this.lc(f.id)))==='l').length,y=fs.filter(f=>this.rc(this.da(this.lc(f.id)))==='m').length,o=fs.filter(f=>this.rc(this.da(this.lc(f.id)))==='h').length,r=fs.filter(f=>this.rc(this.da(this.lc(f.id)))==='c').length;
+const cov=fs.length?Math.round(g/fs.length*100):0;
+h+=`<div class="cd"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px"><div class="cd-t" style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:50%;background:${n.cl||'var(--p)'}"></span>${n.nm}</div><div class="bg"><button class="bt bsm bo" onclick="A.nbed('${n.id}')">✏️</button><button class="bt bsm bd" onclick="A.nbdel('${n.id}')">🗑</button></div></div><p style="font-size:12px;color:var(--tx2)">👥 ${fs.length} · 📊 ${cov}%</p><div style="display:flex;gap:6px;margin-top:6px"><span class="bd-g bdg">🟢${g}</span><span class="bd-g bdy">🟡${y}</span><span class="bd-g bdo">🟠${o}</span><span class="bd-g bdr">🔴${r}</span></div></div>`});h+='</div>'}
+if(this.d.regions.length){h+='<h3 style="margin-bottom:10px;font-size:14px">🗺️ Regiões</h3><div class="g ga">';this.d.regions.forEach(r=>{const fs=this.d.families.filter(f=>f.rg===r.nm);h+=`<div class="cd"><div style="display:flex;justify-content:space-between;align-items:center"><div class="cd-t">${r.nm}</div><div class="bg"><button class="bt bsm bo" onclick="A.rged('${r.id}')">✏️</button><button class="bt bsm bd" onclick="A.rgdel('${r.id}')">🗑</button></div></div><p style="font-size:12px;color:var(--tx2);margin-top:6px">👥 ${fs.length}</p></div>`});h+='</div>'}
+return h
+},
+nbfm(n){n=n||{};this.sm(n.id?'✏️ Editar':'➕ Bairro',`<div class="fg"><label class="fl">Nome</label><input class="fi" id="nbn" value="${n.nm||''}"></div><div class="fg"><label class="fl">Cor</label><input class="fi" type="color" id="nbc" value="${n.cl||'#3B6B9E'}"></div><div class="fg"><label class="fl">Responsável</label><input class="fi" id="nbr" value="${n.rp||''}"></div>`,`<button class="bt bp" onclick="A.nbsv('${n.id||''}')">💾</button>`)},
+nbsv(id){const nm=document.getElementById('nbn').value.trim();if(!nm)return;const o={nm,cl:document.getElementById('nbc').value,rp:document.getElementById('nbr').value};if(id){const i=this.d.neighborhoods.findIndex(n=>n.id===id);if(i>=0)Object.assign(this.d.neighborhoods[i],o)}else{o.id=this.uid();this.d.neighborhoods.push(o)}this.save();this.cm();this.render();this.toast('✅')},
+nbed(id){this.nbfm(this.d.neighborhoods.find(n=>n.id===id))},
+nbdel(id){this.d.neighborhoods=this.d.neighborhoods.filter(n=>n.id!==id);this.save();this.render()},
+rgfm(r){r=r||{};this.sm(r.id?'✏️':'➕ Região',`<div class="fg"><label class="fl">Nome</label><input class="fi" id="rgn" value="${r.nm||''}"></div><div class="fg"><label class="fl">Responsável</label><input class="fi" id="rgr" value="${r.rp||''}"></div>`,`<button class="bt bp" onclick="A.rgsv('${r.id||''}')">💾</button>`)},
+rgsv(id){const nm=document.getElementById('rgn').value.trim();if(!nm)return;const o={nm,rp:document.getElementById('rgr').value};if(id){const i=this.d.regions.findIndex(r=>r.id===id);if(i>=0)Object.assign(this.d.regions[i],o)}else{o.id=this.uid();this.d.regions.push(o)}this.save();this.cm();this.render();this.toast('✅')},
+rged(id){this.rgfm(this.d.regions.find(r=>r.id===id))},
+rgdel(id){this.d.regions=this.d.regions.filter(r=>r.id!==id);this.save();this.render()},
+
+// ═══ CALENDAR ═══
+cM:new Date().getMonth(),cY:new Date().getFullYear(),
+v_calendar(){
+const ms=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const ds=['D','S','T','Q','Q','S','S'];const fd=new Date(this.cY,this.cM,1).getDay(),dm=new Date(this.cY,this.cM+1,0).getDate(),td=new Date();
+let h=`<div class="sh"><div><div class="st">📅 ${ms[this.cM]} ${this.cY}</div></div><div class="bg"><button class="bt bsm bo" onclick="A.cM--;if(A.cM<0){A.cM=11;A.cY--}A.render()">←</button><button class="bt bsm bo" onclick="A.cM=new Date().getMonth();A.cY=new Date().getFullYear();A.render()">Hoje</button><button class="bt bsm bo" onclick="A.cM++;if(A.cM>11){A.cM=0;A.cY++}A.render()">→</button><button class="bt bsm bp" onclick="A.efm()">➕</button></div></div>`;
+h+='<div class="cd"><div class="cg">';ds.forEach(d=>{h+=`<div class="ch">${d}</div>`});
+for(let i=0;i<fd;i++)h+='<div class="cy ot"></div>';
+for(let d=1;d<=dm;d++){const ds2=`${this.cY}-${String(this.cM+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;const it=d===td.getDate()&&this.cM===td.getMonth()&&this.cY===td.getFullYear();const ev=(this.d.events||[]).some(e=>e.dt===ds2)||this.d.families.some(f=>f.bd&&f.bd.substring(5)===ds2.substring(5));h+=`<div class="cy${it?' td':''}${ev?' ev':''}" onclick="A.sde('${ds2}')">${d}</div>`}
+h+='</div></div>';return h
+},
+sde(dt){const ev=(this.d.events||[]).filter(e=>e.dt===dt);const bd=this.d.families.filter(f=>f.bd&&f.bd.substring(5)===dt.substring(5));let h='';bd.forEach(f=>{h+=`<div class="al al-i">🎂 ${f.nm}</div>`});ev.forEach(e=>{h+=`<div class="ac"><div class="at">${e.tp}: ${e.nm}</div><div class="ad">${e.desc||''}</div></div>`});if(!h)h='<p style="color:var(--tx3);font-size:12px">Nenhum evento</p>';h+=`<button class="bt bp bbl" style="margin-top:10px" onclick="A.cm();A.efm('${dt}')">➕ Evento</button>`;this.sm(`📅 ${dt}`,h)},
+efm(dt){this.sm('➕ Evento',`<div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="ed" value="${dt||this.today()}"></div><div class="fg"><label class="fl">Tipo</label><select class="fs" id="etp"><option>Aniversário</option><option>Batismo</option><option>Atividade</option><option>Visita</option><option>Evento da Ala</option><option>Mutirão</option><option>Outro</option></select></div><div class="fg"><label class="fl">Título</label><input class="fi" id="enm"></div><div class="fg"><label class="fl">Descrição</label><textarea class="ft" id="eds" rows="2"></textarea></div>`,`<button class="bt bp" onclick="A.esv()">💾</button>`)},
+esv(){const nm=document.getElementById('enm').value.trim();if(!nm)return;this.d.events=this.d.events||[];this.d.events.push({id:this.uid(),dt:document.getElementById('ed').value,tp:document.getElementById('etp').value,nm,desc:document.getElementById('eds').value});this.save();this.cm();this.render();this.toast('✅')},
+
+// ═══ PLANNER ═══
+v_planner(){const it=(this.d.planner||[]).sort((a,b)=>a.dn-b.dn);let h=`<div class="sh"><div><div class="st">📋 Planejador</div><div class="sst">${it.filter(i=>!i.dn).length} pendentes</div></div><button class="bt bp bsm" onclick="A.pfm()">➕</button></div>`;if(!it.length)h+='<div class="es"><div class="ei">📋</div><p>Nenhuma tarefa</p></div>';else it.forEach(p=>{h+=`<div class="mi${p.dn?' dn':''}" onclick="A.ptg('${p.id}')"><div class="mc">${p.dn?'✓':''}</div><span style="flex:1">${p.tx} <span class="rd">${p.dt?this.rd(p.dt):''}</span></span><button class="bt bsm bd" onclick="event.stopPropagation();A.pdel('${p.id}')">🗑</button></div>`});return h},
+pfm(){this.sm('➕ Tarefa',`<div class="fg"><label class="fl">Tarefa</label><input class="fi" id="ptx"></div><div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="pdt" value="${this.today()}"></div>`,`<button class="bt bp" onclick="A.psv()">💾</button>`)},
+psv(){const tx=document.getElementById('ptx').value.trim();if(!tx)return;this.d.planner=this.d.planner||[];this.d.planner.push({id:this.uid(),tx,dt:document.getElementById('pdt').value,dn:false});this.save();this.cm();this.render();this.toast('✅')},
+ptg(id){const p=this.d.planner.find(x=>x.id===id);if(p){p.dn=!p.dn;this.save();this.render()}},
+pdel(id){this.d.planner=this.d.planner.filter(p=>p.id!==id);this.save();this.render()},
+
+// ═══ MESSAGES ═══
+v_messages(){const ms=this.d.messages_templates;const cs=[...new Set(ms.map(m=>m.c))];let h=`<div class="sh"><div><div class="st">💬 Mensagens</div></div><button class="bt bp bsm" onclick="A.msgfm()">➕</button></div>`;h+=`<div class="tabs">${cs.map((c,i)=>`<div class="tab${i===0?' on':''}" onclick="A.fmsg('${c}')">${c}</div>`).join('')}</div><div id="mgl">`;ms.forEach((m,i)=>{h+=`<div class="cd" style="margin-bottom:8px" data-c="${m.c}"><span class="bd-g bdp">${m.c}</span><p style="margin-top:6px;font-size:13px">${m.t}</p><div class="bg" style="margin-top:8px"><button class="bt bsm bp" onclick="navigator.clipboard.writeText(\`${m.t.replace(/`/g,"'")}\`);A.toast('📋 Copiado')">📋</button><button class="bt bsm bs" onclick="window.open('https://wa.me/?text=${encodeURIComponent(m.t)}')">📱</button><button class="bt bsm bd" onclick="A.msgdel(${i})">🗑</button></div></div>`});h+='</div>';return h},
+fmsg(c){document.querySelectorAll('#mgl .cd').forEach(e=>{e.style.display=e.dataset.c===c?'':'none'});document.querySelectorAll('.tabs .tab').forEach(t=>t.classList.toggle('on',t.textContent===c))},
+msgfm(){const co=[...new Set(this.d.messages_templates.map(m=>m.c))].map(c=>`<option>${c}</option>`).join('');this.sm('➕ Mensagem',`<div class="fg"><label class="fl">Categoria</label><select class="fs" id="mgc">${co}<option value="__n">+ Nova</option></select></div><div class="fg"><label class="fl">Texto</label><textarea class="ft" id="mgt" rows="4"></textarea></div>`,`<button class="bt bp" onclick="A.msgsv()">💾</button>`)},
+msgsv(){let c=document.getElementById('mgc').value;if(c==='__n'){c=prompt('Nova:');if(!c)return}const t=document.getElementById('mgt').value.trim();if(!t)return;this.d.messages_templates.push({c,t});this.save();this.cm();this.render();this.toast('✅')},
+msgdel(i){this.d.messages_templates.splice(i,1);this.save();this.render()},
+
+// ═══ DOCUMENTS ═══
+v_documents(){const docs=this.d.documents||[];let h=`<div class="sh"><div><div class="st">📂 Documentos</div><div class="sst">${docs.length} documentos</div></div><button class="bt bp bsm" onclick="A.docfm()">➕ Novo</button></div>`;if(!docs.length)h+='<div class="es"><div class="ei">📂</div><p>Nenhum documento</p></div>';else docs.forEach(d=>{h+=`<div class="ac"><div class="at">📄 ${d.nm}</div><div class="ad">${d.cat||''} · ${this.rd(d.cr)}</div><div class="ab"><button class="bt bsm bp" onclick="A.docView('${d.id}')">👁 Ver</button><button class="bt bsm bd" onclick="A.docdel('${d.id}')">🗑</button></div></div>`});return h},
+docfm(){this.sm('📂 Novo Documento',`<div class="fg"><label class="fl">Nome</label><input class="fi" id="dcn"></div><div class="fg"><label class="fl">Categoria</label><select class="fs" id="dcc"><option>Relatório</option><option>Planejamento</option><option>Material</option><option>Lista</option><option>Calendário</option><option>Outro</option></select></div><div class="fg"><label class="fl">Conteúdo</label><textarea class="ft" id="dct" rows="8"></textarea></div>`,`<button class="bt bp" onclick="A.docsv()">💾</button>`)},
+docsv(){const nm=document.getElementById('dcn').value.trim();if(!nm)return;this.d.documents=this.d.documents||[];this.d.documents.push({id:this.uid(),nm,cat:document.getElementById('dcc').value,ct:document.getElementById('dct').value,cr:this.today()});this.save();this.cm();this.render();this.toast('✅')},
+docView(id){const d=(this.d.documents||[]).find(x=>x.id===id);if(d)this.sm(`📄 ${d.nm}`,`<pre style="white-space:pre-wrap;font-size:12px;background:var(--bg3);padding:12px;border-radius:8px">${d.ct||''}</pre>`)},
+docdel(id){this.d.documents=(this.d.documents||[]).filter(d=>d.id!==id);this.save();this.render()},
+
+// ═══ MIRACLES ═══
+v_miracles(){const ms=this.d.miracles.sort((a,b)=>new Date(b.dt)-new Date(a.dt));let h=`<div class="sh"><div><div class="st">✨ Milagres</div><div class="sst">${ms.length} registrados</div></div><button class="bt ba bsm" onclick="A.mrfm()">✨ Registrar</button></div>`;if(!ms.length)h+='<div class="es"><div class="ei">✨</div><p>Registre os milagres!</p></div>';else{h+='<div class="g ga">';ms.forEach(m=>{const f=this.d.families.find(x=>x.id===m.fid);h+=`<div class="cd" style="border-top:3px solid var(--a)"><div style="font-size:24px;margin-bottom:6px">✨</div><div class="cd-t">${m.tp}</div><p style="font-size:12px;color:var(--tx2);margin:6px 0">${m.desc||''}</p><div style="display:flex;justify-content:space-between;align-items:center"><span class="chip">${f?.nm||'?'}</span><span class="rd">${this.rd(m.dt)}</span></div><button class="bt bsm bd" style="margin-top:6px" onclick="A.mrdel('${m.id}')">🗑</button></div>`});h+='</div>'}return h},
+mrfm(){const fo=this.d.families.map(f=>`<option value="${f.id}">${f.nm}</option>`).join('');this.sm('✨ Milagre',`<div class="fg"><label class="fl">Família</label><select class="fs" id="mrf"><option value="">—</option>${fo}</select></div><div class="fg"><label class="fl">Tipo</label><select class="fs" id="mrt"><option>Família voltou</option><option>Batismo</option><option>Emprego</option><option>Necessidade atendida</option><option>Milagre pessoal</option><option>Testemunho</option><option>Retorno</option><option>Outro</option></select></div><div class="fg"><label class="fl">Descrição</label><textarea class="ft" id="mrd" rows="3"></textarea></div><div class="fg"><label class="fl">Data</label><input class="fi" type="date" id="mrdt" value="${this.today()}"></div>`,`<button class="bt ba" onclick="A.mrsv()">✨ Salvar</button>`)},
+mrsv(){this.d.miracles.push({id:this.uid(),fid:document.getElementById('mrf').value,tp:document.getElementById('mrt').value,desc:document.getElementById('mrd').value,dt:document.getElementById('mrdt').value});this.save();this.cm();this.render();this.toast('✨ +25 XP')},
+mrdel(id){this.d.miracles=this.d.miracles.filter(m=>m.id!==id);this.save();this.render()},
+
+// ═══ LEVELS ═══
+v_levels(){const xp=this.xp(),cur=this.lvl(),ls=[...this.d.levels].sort((a,b)=>a.x-b.x);let h=`<div class="sh"><div><div class="st">⭐ Níveis e Conquistas</div></div></div><div class="cd" style="margin-bottom:20px;text-align:center"><div style="font-size:44px">${cur.i}</div><h2 style="color:var(--p)">${cur.n}</h2><p style="color:var(--tx2)">${xp} XP</p><div class="pr" style="margin-top:10px;max-width:280px;margin-left:auto;margin-right:auto"><div class="pb" style="width:${Math.min(100,xp/10)}%"></div></div></div>`;
+h+='<h3 style="margin-bottom:10px;font-size:14px">🏆 Níveis</h3><div class="g ga" style="margin-bottom:20px">';ls.forEach(l=>{const ok=xp>=l.x;h+=`<div class="cd" style="text-align:center;opacity:${ok?1:.5}"><div style="font-size:28px">${l.i}</div><div style="font-weight:600;font-size:13px;margin:3px 0">${l.n}</div><div style="font-size:11px;color:var(--tx3)">${l.x} XP</div>${ok?'<span class="bd-g bdg" style="margin-top:3px">✅</span>':''}</div>`});h+='</div>';
+h+='<h3 style="margin-bottom:10px;font-size:14px">🎖️ Conquistas</h3><div class="g ga">';this.d.achievements.forEach(a=>{const c=this.ap(a),ok=c>=a.r;h+=`<div class="cd" style="text-align:center;opacity:${ok?1:.5}"><div style="font-size:28px">${a.i}</div><div style="font-weight:600;font-size:13px;margin:3px 0">${a.n}</div><div style="font-size:11px;color:var(--tx3)">${a.d}</div><div class="pr" style="margin-top:6px"><div class="pb" style="width:${Math.min(100,c/a.r*100)}%"></div></div><div style="font-size:10px;color:var(--tx3);margin-top:3px">${c}/${a.r}</div></div>`});h+='</div>';return h},
+ap(a){const r=this.d.records;switch(a.t){case'vis':return r.filter(x=>x.tp==='Visita').length;case'cont':return r.filter(x=>['Ligação','Mensagem','WhatsApp'].includes(x.tp)).length;case'spi':return r.filter(x=>x.tp==='Compartilhamento Espiritual').length;case'rec':case'tot':return r.length;case'cons':return r.filter(x=>x.tp==='Apoio Emocional').length;case'resc':return this.d.miracles.filter(m=>m.tp.includes('voltou')||m.tp.includes('Retorno')).length;default:return 0}},
+
+// ═══ IMPACT ═══
+v_impact(){const tm=this.tm(),ci=[...new Set(tm.map(r=>r.fid))],v=tm.filter(r=>r.tp==='Visita').length,c=tm.filter(r=>['Ligação','Mensagem','WhatsApp'].includes(r.tp)).length,s=tm.filter(r=>r.tp==='Compartilhamento Espiritual').length,hp=tm.filter(r=>['Ajuda','Serviço'].includes(r.tp)).length;
+// Monthly comparison
+const pn=new Date();pn.setMonth(pn.getMonth()-1);const pm=this.d.records.filter(r=>{const d=new Date(r.dt);return d.getMonth()===pn.getMonth()&&d.getFullYear()===pn.getFullYear()});
+const diff=tm.length-pm.length;const trend=diff>0?`📈 +${diff} vs mês anterior`:diff<0?`📉 ${diff} vs mês anterior`:'➡️ Igual ao mês anterior';
+return`<div class="sh"><div><div class="st">📈 Vidas Fortalecidas</div></div></div><div class="ib">"${this.q()}"</div>
+<div class="al al-i" style="margin-bottom:14px">${trend}</div>
+<div class="g g3" style="margin-bottom:20px">
+<div class="sc acc"><div class="si">👥</div><div class="sv">${ci.length}</div><div class="sl">Fortalecidas</div></div>
+<div class="sc pri"><div class="si">🏠</div><div class="sv">${v}</div><div class="sl">Visitas</div></div>
+<div class="sc grn"><div class="si">📞</div><div class="sv">${c}</div><div class="sl">Contatos</div></div>
+<div class="sc pri"><div class="si">🙏</div><div class="sv">${s}</div><div class="sl">Espiritual</div></div>
+<div class="sc acc"><div class="si">🤝</div><div class="sv">${hp}</div><div class="sl">Ajudadas</div></div>
+<div class="sc grn"><div class="si">⭐</div><div class="sv">${tm.length}</div><div class="sl">Total</div></div>
+</div>
+<div class="cd"><div class="cd-t">📊 Atividades</div><canvas id="impChart" class="chart-canvas" height="160" style="margin-top:10px"></canvas></div>
+<div class="cd" style="margin-top:14px;text-align:center"><div class="cd-t">✨ Milagres</div><div class="sv" style="font-size:32px;margin:12px 0;color:var(--a)">${this.d.miracles.length}</div></div>`
+},
+a_impact(){
+const cv=document.getElementById('impChart');if(!cv)return;
+const ctx=cv.getContext('2d');const tm=this.tm();const ts=['Visita','Ligação','Mensagem','Ajuda','Oração'];const vs=ts.map(t=>tm.filter(r=>r.tp===t).length);const mx=Math.max(...vs,1);
+const w=cv.width=cv.parentElement.clientWidth-32;const h=cv.height=160;ctx.clearRect(0,0,w,h);
+const bw=Math.min(40,(w-ts.length*8)/ts.length);const gap=(w-ts.length*bw)/(ts.length+1);
+ts.forEach((t,i)=>{const x=gap+(bw+gap)*i;const bh=vs[i]/mx*(h-40);const y=h-25-bh;const g=ctx.createLinearGradient(x,y,x,h-25);g.addColorStop(0,'#3B6B9E');g.addColorStop(1,'#6B9FCC');ctx.fillStyle=g;ctx.beginPath();ctx.roundRect(x,y,bw,bh,4);ctx.fill();ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--tx2');ctx.font='10px sans-serif';ctx.textAlign='center';ctx.fillText(vs[i],x+bw/2,y-4);ctx.fillText(t.substring(0,4),x+bw/2,h-8)})
+},
+
+// ═══ WARD VIEW ═══
+v_wardview(){const t=this.d.families.length,ac=this.d.families.filter(f=>f.st==='Ativa').length,tm=this.tm(),a=[...new Set(tm.map(r=>r.fid))].length;const f30=this.d.families.filter(f=>{const d=this.da(this.lc(f.id));return d>30&&d<=60}).length,f60=this.d.families.filter(f=>{const d=this.da(this.lc(f.id));return d>60&&d<=90}).length,f90=this.d.families.filter(f=>this.da(this.lc(f.id))>90).length;const no=this.d.needs.filter(n=>n.st!=='ok'&&n.st!=='done').length,ur=this.d.needs.filter(n=>n.pr==='Urgente'&&n.st!=='ok').length,cv=this.d.families.filter(f=>f.st==='Converso Recente').length,nw=this.d.families.filter(f=>f.st==='Nova').length,pct=t?Math.round(a/t*100):0;
+return`<div class="sh"><div><div class="st">⛪ Visão da Ala</div></div><button class="bt bo bsm" onclick="A.printRep()">🖨️</button></div>
+<div class="g g4" style="margin-bottom:20px">
+<div class="sc pri"><div class="si">👥</div><div class="sv">${t}</div><div class="sl">Total</div></div>
+<div class="sc grn"><div class="si">✅</div><div class="sv">${ac}</div><div class="sl">Ativas</div></div>
+<div class="sc grn"><div class="si">🔧</div><div class="sv">${a}</div><div class="sl">Acompanhadas</div></div>
+<div class="sc red"><div class="si">🔴</div><div class="sv">${f90}</div><div class="sl">Críticas</div></div>
+<div class="sc ylw"><div class="si">📋</div><div class="sv">${no}</div><div class="sl">Necessidades</div></div>
+<div class="sc red"><div class="si">🚨</div><div class="sv">${ur}</div><div class="sl">Urgentes</div></div>
+<div class="sc acc"><div class="si">🌱</div><div class="sv">${cv}</div><div class="sl">Conversos</div></div>
+<div class="sc pri"><div class="si">🆕</div><div class="sv">${nw}</div><div class="sl">Novas</div></div>
+<div class="sc ylw"><div class="si">📅</div><div class="sv">${f30}</div><div class="sl">30d s/ contato</div></div>
+<div class="sc orn"><div class="si">📅</div><div class="sv">${f60}</div><div class="sl">60d s/ contato</div></div>
+<div class="sc red"><div class="si">📅</div><div class="sv">${f90}</div><div class="sl">90d+ s/ contato</div></div>
+<div class="sc acc"><div class="si">📊</div><div class="sv">${pct}%</div><div class="sl">Cobertura</div></div>
+</div>
+<div class="cd"><div class="cd-t">📊 Cobertura</div><p style="font-size:12px;color:var(--tx2);margin:6px 0">${a}/${t} famílias (${pct}%)</p><div class="pr" style="height:12px"><div class="pb" style="width:${pct}%"></div></div></div>
+<div class="cd" style="margin-top:14px"><div class="cd-t">📈 Tendência Mensal</div><canvas id="wardChart" class="chart-canvas" height="140" style="margin-top:10px"></canvas></div>`
+},
+a_wardview(){
+const cv=document.getElementById('wardChart');if(!cv)return;const ctx=cv.getContext('2d');
+const w=cv.width=cv.parentElement.clientWidth-32;const h=cv.height=140;ctx.clearRect(0,0,w,h);
+const ms=['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+const now=new Date();const vals=[];
+for(let i=5;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth()-i,1);vals.push({l:ms[d.getMonth()],v:this.d.records.filter(r=>{const rd=new Date(r.dt);return rd.getMonth()===d.getMonth()&&rd.getFullYear()===d.getFullYear()}).length})}
+const mx=Math.max(...vals.map(v=>v.v),1);const pw=(w-40)/Math.max(vals.length-1,1);
+ctx.strokeStyle='var(--p)';ctx.lineWidth=2;ctx.beginPath();
+vals.forEach((v,i)=>{const x=20+pw*i;const y=h-25-v.v/mx*(h-45);if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)});ctx.stroke();
+vals.forEach((v,i)=>{const x=20+pw*i;const y=h-25-v.v/mx*(h-45);ctx.fillStyle='var(--p)';ctx.beginPath();ctx.arc(x,y,4,0,Math.PI*2);ctx.fill();ctx.fillStyle=getComputedStyle(document.body).getPropertyValue('--tx2');ctx.font='9px sans-serif';ctx.textAlign='center';ctx.fillText(v.v,x,y-8);ctx.fillText(v.l,x,h-8)})
+},
+
+// ═══ HIERARCHY ═══
+v_hierarchy(){let h=`<div class="sh"><div><div class="st">🏛️ Organização</div></div><button class="bt bp bsm" onclick="A.hied()">✏️</button></div><div class="cd"><div style="font-size:16px;font-weight:700;margin-bottom:12px">⛪ ${this.d.ward}</div>`;this.d.hierarchy.forEach(x=>{h+=`<div class="li" style="padding-left:20px"><span style="color:var(--tx3)">├──</span> <strong>${x}</strong></div>`});h+='</div>';return h},
+hied(){this.sm('✏️ Organização',`<div class="fg"><label class="fl">Nome da Ala</label><input class="fi" id="hn" value="${this.d.ward}"></div><div class="fg"><label class="fl">Organizações (uma por linha)</label><textarea class="ft" id="hl" rows="10">${this.d.hierarchy.join('\n')}</textarea></div>`,`<button class="bt bp" onclick="A.d.ward=document.getElementById('hn').value;A.d.hierarchy=document.getElementById('hl').value.split('\\n').map(s=>s.trim()).filter(Boolean);A.save();A.cm();A.render();A.toast('✅')">💾</button>`)},
+
+// ═══ WARD HEALTH ═══
+v_wardhealth(){const t=this.d.families.length,g=this.d.families.filter(f=>this.rc(this.da(this.lc(f.id)))==='l').length,y=this.d.families.filter(f=>this.rc(this.da(this.lc(f.id)))==='m').length,o=this.d.families.filter(f=>this.rc(this.da(this.lc(f.id)))==='h').length,r=this.d.families.filter(f=>this.rc(this.da(this.lc(f.id)))==='c').length;const nr=this.d.needs.filter(n=>n.st==='ok'||n.st==='done').length,cv=t?Math.round(g/t*100):0;
+let h=`<div class="sh"><div><div class="st">📋 Saúde da Ala</div></div></div>
+<div class="g g4" style="margin-bottom:20px"><div class="sc grn"><div class="si">🟢</div><div class="sv">${g}</div><div class="sl">Bem</div></div><div class="sc ylw"><div class="si">🟡</div><div class="sv">${y}</div><div class="sl">Atenção</div></div><div class="sc orn"><div class="si">🟠</div><div class="sv">${o}</div><div class="sl">Risco</div></div><div class="sc red"><div class="si">🔴</div><div class="sv">${r}</div><div class="sl">Críticas</div></div></div>
+<div class="g g2" style="margin-bottom:20px"><div class="cd"><div class="cd-t">✅ Necessidades Atendidas</div><div class="sv" style="text-align:center;margin:12px 0">${nr}</div></div><div class="cd"><div class="cd-t">📈 Cobertura</div><div class="sv" style="text-align:center;margin:12px 0;color:${cv>=70?'var(--ok)':cv>=40?'var(--w)':'var(--ng)'}">${cv}%</div><div class="pr"><div class="pb" style="width:${cv}%"></div></div></div></div>
+<div class="cd"><div class="cd-t">🚨 Precisam de Atenção</div><div style="margin-top:10px">`;
+const att=this.d.families.filter(f=>this.da(this.lc(f.id))>60).sort((a,b)=>this.da(this.lc(b.id))-this.da(this.lc(a.id)));
+if(att.length)att.slice(0,15).forEach(f=>{const d=this.da(this.lc(f.id));h+=`<div class="li" style="cursor:pointer" onclick="A.fdet('${f.id}')">${this.avCS(f.nm)}<span style="flex:1">${f.nm} — <span class="rd">${this.rd(this.lc(f.id))}</span></span>${this.rb(d)}</div>`});
+else h+='<p style="color:var(--tx3);text-align:center;padding:14px">✅ Todas bem acompanhadas!</p>';
+h+='</div></div>';return h
+},
+
+// ═══ SETTINGS ═══
+v_settings(){return`<div class="sh"><div><div class="st">⚙️ Configurações</div></div></div>
+<div class="tabs"><div class="tab on" onclick="A.stab('gen')">Geral</div><div class="tab" onclick="A.stab('cat')">Categorias</div><div class="tab" onclick="A.stab('typ')">Tipos</div><div class="tab" onclick="A.stab('gol')">Metas</div><div class="tab" onclick="A.stab('quo')">Frases</div><div class="tab" onclick="A.stab('tag')">Tags</div></div><div id="sc">${this.sgen()}</div>`},
+stab(t){document.querySelectorAll('.tabs .tab').forEach((e,i)=>e.classList.toggle('on',['gen','cat','typ','gol','quo','tag'][i]===t));const c=document.getElementById('sc');if(t==='gen')c.innerHTML=this.sgen();else if(t==='cat')c.innerHTML=this.slist('categories','Categorias',this.d.categories);else if(t==='typ')c.innerHTML=this.slist('record_types','Tipos',this.d.record_types);else if(t==='gol')c.innerHTML=this.sgol();else if(t==='quo')c.innerHTML=this.slist('quotes','Frases',this.d.quotes);else if(t==='tag')c.innerHTML=this.stags()},
+sgen(){return`<div class="cd"><h3 style="margin-bottom:12px;font-size:14px">⛪ Ala</h3><div class="fg"><label class="fl">Nome</label><input class="fi" value="${this.d.ward}" onchange="A.d.ward=this.value;A.save()"></div><div class="fg"><label class="fl">Perfil</label><select class="fs" onchange="A.d.profile=this.value;A.save()"><option ${this.d.profile==='Ministrador'?'selected':''}>Ministrador</option><option ${this.d.profile==='Ministradora'?'selected':''}>Ministradora</option><option ${this.d.profile==='Líder do Quórum'?'selected':''}>Líder do Quórum</option><option ${this.d.profile==='Líder Sociedade de Socorro'?'selected':''}>Líder Sociedade de Socorro</option><option ${this.d.profile==='Bispado'?'selected':''}>Bispado</option><option ${this.d.profile==='Administrador'?'selected':''}>Administrador</option></select></div></div><div class="cd" style="margin-top:12px"><h3 style="margin-bottom:8px;font-size:14px">📊 Estatísticas</h3><div class="g g3" style="text-align:center"><div><strong>${this.d.families.length}</strong><br><small style="color:var(--tx2)">Famílias</small></div><div><strong>${this.d.records.length}</strong><br><small style="color:var(--tx2)">Registros</small></div><div><strong>${this.d.miracles.length}</strong><br><small style="color:var(--tx2)">Milagres</small></div></div></div>`},
+slist(k,t,it){let h=`<div class="cd"><h3 style="margin-bottom:12px;font-size:14px">${t}</h3><div class="fg" style="display:flex;gap:6px"><input class="fi" id="si_${k}" placeholder="Adicionar..."><button class="bt bp" onclick="A.sadd('${k}')">➕</button></div>`;it.forEach((x,i)=>{h+=`<div class="li"><span style="flex:1;font-size:13px">${x}</span><button class="bt bsm bo" onclick="A.sed('${k}',${i})">✏️</button><button class="bt bsm bd" onclick="A.srem('${k}',${i})">🗑</button></div>`});h+='</div>';return h},
+sadd(k){const i=document.getElementById('si_'+k);if(!i.value.trim())return;this.d[k].push(i.value.trim());this.save();this.stab(k==='record_types'?'typ':k==='categories'?'cat':'quo');this.toast('✅')},
+sed(k,i){const v=prompt('Editar:',this.d[k][i]);if(v!==null){this.d[k][i]=v;this.save();this.stab(k==='record_types'?'typ':k==='categories'?'cat':'quo')}},
+srem(k,i){this.d[k].splice(i,1);this.save();this.stab(k==='record_types'?'typ':k==='categories'?'cat':'quo')},
+sgol(){const g=this.d.goals;return`<div class="cd"><h3 style="margin-bottom:12px;font-size:14px">🎯 Metas</h3><div class="fg"><label class="fl">Visitas/mês</label><input class="fi" type="number" value="${g.visits}" onchange="A.d.goals.visits=+this.value;A.save()"></div><div class="fg"><label class="fl">Contatos/mês</label><input class="fi" type="number" value="${g.contacts}" onchange="A.d.goals.contacts=+this.value;A.save()"></div><div class="fg"><label class="fl">Famílias acompanhadas (%)</label><input class="fi" type="number" value="${g.families}" onchange="A.d.goals.families=+this.value;A.save()"></div><div class="fg"><label class="fl">Necessidades atendidas</label><input class="fi" type="number" value="${g.needs}" onchange="A.d.goals.needs=+this.value;A.save()"></div><div class="al al-s">✅ Salvo automaticamente</div></div>`},
+stags(){const tg=this.d.tags||[];let h=`<div class="cd"><h3 style="margin-bottom:12px;font-size:14px">🏷️ Tags</h3><div class="fg" style="display:flex;gap:6px"><input class="fi" id="tn" placeholder="Nome da tag"><input class="fi" type="color" id="tc2" value="#3B6B9E" style="width:50px;padding:4px"><button class="bt bp" onclick="A.tadd()">➕</button></div>`;tg.forEach((t,i)=>{h+=`<div class="li"><span class="tag" style="background:${t.c};color:#fff">${t.n}</span><span style="flex:1"></span><button class="bt bsm bd" onclick="A.trem(${i})">🗑</button></div>`});h+='</div>';return h},
+tadd(){const n=document.getElementById('tn').value.trim();if(!n)return;this.d.tags=this.d.tags||[];this.d.tags.push({n,c:document.getElementById('tc2').value});this.save();this.stab('tag');this.toast('✅')},
+trem(i){this.d.tags.splice(i,1);this.save();this.stab('tag')},
+
+// ═══ PROFILES ═══
+v_profiles(){const ps=[{n:'Ministrador',i:'👤',p:['Ver famílias designadas','Registrar']},{n:'Ministradora',i:'👤',p:['Ver famílias designadas','Registrar']},{n:'Líder do Quórum',i:'👨',p:['Ver todas famílias','Alterar','Exportar','Painel']},{n:'Líder Sociedade de Socorro',i:'👩',p:['Ver todas famílias','Alterar','Exportar','Painel']},{n:'Bispado',i:'⛪',p:['Tudo exceto admin']},{n:'Administrador',i:'⚙️',p:['Todas as permissões']}];
+let h=`<div class="sh"><div><div class="st">👤 Perfis</div></div></div><div class="al al-i">Perfil: <strong>${this.d.profile}</strong></div><div class="g ga">`;
+ps.forEach(p=>{const on=p.n===this.d.profile;h+=`<div class="cd" style="${on?'border:2px solid var(--p)':''}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:8px"><span style="font-size:22px">${p.i}</span><h3 style="font-size:14px">${p.n}</h3>${on?'<span class="bd-g bdp">Ativo</span>':''}</div><div style="font-size:11px;color:var(--tx2)">${p.p.map(x=>'✅ '+x).join('<br>')}</div><button class="bt bsm ${on?'bp':'bo'}" style="margin-top:8px" onclick="A.d.profile='${p.n}';A.save();A.render();A.toast('✅')">${on?'✅ Ativo':'Selecionar'}</button></div>`});
+h+='</div>';return h
+},
+
+// ═══ BACKUP ═══
+v_backup(){const sz=(new Blob([JSON.stringify(this.d)]).size/1024).toFixed(1);return`<div class="sh"><div><div class="st">💾 Backup</div></div></div>
+<div class="cd" style="margin-bottom:14px"><div class="cd-t">📊 Info</div><p style="color:var(--tx2);font-size:12px;margin-top:6px">Tamanho: ${sz} KB · Último: ${localStorage.getItem('lb')||'Nunca'}</p></div>
+<div class="g g2"><div class="cd" style="text-align:center"><div style="font-size:32px">📤</div><h3 style="font-size:14px;margin:6px 0">Exportar</h3><button class="bt bp bbl" onclick="A.expBk()">📤 Exportar JSON</button></div><div class="cd" style="text-align:center"><div style="font-size:32px">📥</div><h3 style="font-size:14px;margin:6px 0">Importar</h3><input type="file" id="impf" accept=".json" style="display:none" onchange="A.impBk(event)"><button class="bt ba bbl" onclick="document.getElementById('impf').click()">📥 Importar JSON</button></div></div>
+<div class="g g2" style="margin-top:14px"><div class="cd" style="text-align:center"><div style="font-size:32px">📄</div><h3 style="font-size:14px;margin:6px 0">CSV</h3><button class="bt bo bbl" onclick="A.expCSV()">📄 Exportar</button></div><div class="cd" style="text-align:center"><div style="font-size:32px">🖨️</div><h3 style="font-size:14px;margin:6px 0">Imprimir</h3><button class="bt bo bbl" onclick="A.printRep()">🖨️ Imprimir</button></div></div>`},
+expBk(){const b=new Blob([JSON.stringify(this.d,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`ministrando_${this.today()}.json`;a.click();localStorage.setItem('lb',new Date().toLocaleString('pt-BR'));this.toast('📤 Exportado')},
+impBk(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const d=JSON.parse(ev.target.result);if(confirm('Restaurar backup?')){this.d=d;this.save();this.render();this.toast('✅ Restaurado')}}catch(er){this.toast('❌ Inválido','er')}};r.readAsText(f)},
+expD(t){const b=new Blob([JSON.stringify(this.d[t]||this.d,null,2)],{type:'application/json'});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=`${t}_${this.today()}.json`;a.click();this.toast('📤 Exportado')},
+printRep(){let h=`<html><head><title>Relatório</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #ddd;text-align:left;font-size:11px}th{background:#f5f5f5}</style></head><body><h1 style="text-align:center">🛠️ Ministrando à Maneira do Senhor</h1><p style="text-align:center">${new Date().toLocaleDateString('pt-BR')}</p><h2>Famílias (${this.d.families.length})</h2><table><tr><th>Nome</th><th>Tel</th><th>Bairro</th><th>Status</th><th>Último</th><th>Dias</th></tr>`;this.d.families.forEach(f=>{const lc=this.lc(f.id),d=this.da(lc);h+=`<tr><td>${f.nm}</td><td>${f.ph||''}</td><td>${f.nb||''}</td><td>${f.st||''}</td><td>${lc||'—'}</td><td>${d}</td></tr>`});h+='</table></body></html>';const w=window.open('','_blank');w.document.write(h);w.document.close();w.print()},
+};
+document.addEventListener('DOMContentLoaded',()=>A.init());
+</script>
+</body>
+</html>
